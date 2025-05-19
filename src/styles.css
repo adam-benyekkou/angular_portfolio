@@ -1,24 +1,21 @@
 @import "tailwindcss";
 @import "tailwindcss-primeui";
-@import "primeicons/primeicons.css"; /* You can add global styles to this file, and also import other style files */
-/* Configuration des layers CSS pour garantir la priorité correcte */
+@import "primeicons/primeicons.css";
 @layer tailwind-base, primeng, tailwind-utilities;
 
 @config "./tailwind.config.js";
 
-/* Import du plugin PrimeUI */
 
-/* Configuration des layers pour compatibilité PrimeNG */
 @layer tailwind-base {
-  /* Tailwind base styles */
+
 }
 
 @layer primeng {
-  /* PrimeNG s'injectera ici */
+
 }
 
 @layer tailwind-utilities {
-  /* Tailwind utilities s'injecteront ici */
+
 }
 
-/* Import des icônes PrimeNG */
+
