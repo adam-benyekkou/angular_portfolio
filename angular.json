@@ -26,9 +26,10 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": ["src/styles.css"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["node_modules"]
+            },
             "scripts": []
           },
           "configurations": {
@@ -85,7 +86,8 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "./node_modules/tailwindcss-primeui/v4/index.css"
             ],
             "scripts": []
           }
@@ -94,6 +96,7 @@
     }
   },
   "cli": {
-    "analytics": "4f33e7fa-04db-4ebd-b6fd-8b5438dbb3ff"
+    "analytics": "4f33e7fa-04db-4ebd-b6fd-8b5438dbb3ff",
+    "root": ""
   }
 }
