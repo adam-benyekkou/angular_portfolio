@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Major+Mono+Display&family=VT323&display=swap');
+
 @layer theme, tailwind-base, primeng, tailwind-utilities;
 
 @import "tailwindcss-primeui";
@@ -6,6 +8,58 @@
 @import "tailwindcss/preflight.css" layer(tailwind-base);
 @import "tailwindcss/utilities.css" layer(tailwind-utilities);
 
-@layer primeng {
+/* Import the fonts first, outside any layer */
 
-};
+/* Define variables in theme layer instead of base */
+@layer theme {
+  :root {
+    /* Font variables - keeping these as they're good */
+    --font-terminal: 'JetBrains Mono', monospace;
+    --font-terminal-retro: 'VT323', monospace;
+    --font-terminal-nier: 'Major Mono Display', monospace;
+
+    /* NieR Automata UI color scheme */
+    --color-nier-dark: #2a2a2a;        /* Dark background */
+    --color-nier-darker: #1f1f1f;      /* Darker background for contrast */
+    --color-nier-light: #e9dcc9;       /* Light parchment text color */
+    --color-nier-accent: #c8b086;      /* Golden tan accent */
+    --color-nier-highlight: #d9cdb9;   /* Brighter highlight for hover/focus */
+    --color-nier-subtle: #3a3a3a;      /* Slightly lighter than background for cards */
+    --color-nier-red: #9e3f3f;         /* For warnings/errors */
+  }
+}
+
+@layer tailwind-utilities {
+  /* Add these to your custom utilities */
+  .bg-nier-dark {
+    background-color: var(--color-nier-dark);
+  }
+
+  .bg-nier-darker {
+    background-color: var(--color-nier-darker);
+  }
+
+  .bg-nier-subtle {
+    background-color: var(--color-nier-subtle);
+  }
+
+  .text-nier-light {
+    color: var(--color-nier-light);
+  }
+
+  .text-nier-accent {
+    color: var(--color-nier-accent);
+  }
+
+  .text-nier-highlight {
+    color: var(--color-nier-highlight);
+  }
+
+  .border-nier-accent {
+    border-color: var(--color-nier-accent);
+  }
+}
+
+@layer primeng {
+  /* Your PrimeNG customizations here */
+}
