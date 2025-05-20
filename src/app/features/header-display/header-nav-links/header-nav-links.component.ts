@@ -1,16 +1,15 @@
 import { Component } from '@angular/core';
 
-
-import { ButtonModule } from 'primeng/button';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   selector: 'app-header-nav-links',
-  imports: [ButtonModule],
+  imports: [ButtonComponent],
   templateUrl: './header-nav-links.component.html',
-  styleUrl: './header-nav-links.component.css'
+  styleUrl: './header-nav-links.component.css',
 })
 export class HeaderNavLinksComponent {
-  onClick(){
+  onClick() {
     console.log('click');
   }
 }

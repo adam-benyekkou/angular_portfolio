@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Major+Mono+Display&family=VT323&display=swap');
 
-@layer theme, tailwind-base, primeng, tailwind-utilities;
-
-@import "tailwindcss-primeui";
+@layer theme, tailwind-base, tailwind-utilities;
 
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(tailwind-base);
@@ -27,7 +25,22 @@
     --color-nier-highlight: #5a5a50;  /* Highlight for selection */
   }
 }
+
 @layer tailwind-utilities {
+  /* Font utilities */
+  .font-terminal {
+    font-family: var(--font-terminal);
+  }
+
+  .font-terminal-retro {
+    font-family: var(--font-terminal-retro);
+  }
+
+  .font-terminal-nier {
+    font-family: var(--font-terminal-nier);
+  }
+
+  /* Background utilities */
   .bg-nier-bg {
     background-color: var(--color-nier-bg);
   }
@@ -40,6 +53,7 @@
     background-color: var(--color-nier-mid);
   }
 
+  /* Text utilities */
   .text-nier-dark {
     color: var(--color-nier-text-dark);
   }
@@ -48,8 +62,13 @@
     color: var(--color-nier-text-light);
   }
 
+  /* Border utilities */
   .border-nier-border {
     border-color: var(--color-nier-border);
+  }
+
+  .border-nier-accent {
+    border-color: var(--color-nier-accent);
   }
 
   /* Grid background utility */
@@ -59,8 +78,39 @@
     linear-gradient(90deg, var(--color-nier-grid) 1px, transparent 1px);
     background-size: 20px 20px;
   }
-}
 
-@layer primeng {
-  /* Your PrimeNG customizations here */
+  /* Button utilities */
+  .nier-button {
+    background-color: var(--color-nier-mid);
+    color: var(--color-nier-text-dark);
+    border: 1px solid var(--color-nier-border);
+    font-family: var(--font-terminal-retro);
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s;
+  }
+
+  .nier-button:hover {
+    background-color: var(--color-nier-dark);
+    color: var(--color-nier-text-light);
+  }
+
+  .nier-button-active {
+    background-color: var(--color-nier-dark);
+    color: var(--color-nier-text-light);
+    border: 1px solid var(--color-nier-border);
+    font-family: var(--font-terminal-retro);
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Interactive element focus styles */
+  .nier-focus-ring {
+    outline: none;
+  }
+
+  .nier-focus-ring:focus-visible {
+    outline: 2px solid var(--color-nier-dark);
+    outline-offset: 1px;
+  }
 }
