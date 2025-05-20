@@ -1,6 +1,8 @@
 <button
   class="w-48 text-left font-noto-jp text-base uppercase transition-all duration-300 rounded-none p-1.5 button-custom"
   (click)="handleClick()"
+  [attr.data-label]="label()"
 >
   <span class="relative z-10">{{ label() }}</span>
+  <span class="scan-line"></span>
 </button>
