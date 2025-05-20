@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Major+Mono+Display&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Major+Mono+Display&family=Noto+Sans+JP:wght@300;400;500&family=VT323&display=swap');
 
 @layer theme, tailwind-base, tailwind-utilities;
 
@@ -12,6 +12,7 @@
     --font-terminal: 'JetBrains Mono', monospace;
     --font-terminal-retro: 'VT323', monospace;
     --font-terminal-nier: 'Major Mono Display', monospace;
+    --font-noto-jp: 'Noto Sans JP', sans-serif;
 
     /* Authentic NieR Automata UI colors from screenshot */
     --color-nier-bg: #dcd8c0;         /* Main parchment background */
@@ -38,6 +39,11 @@
 
   .font-terminal-nier {
     font-family: var(--font-terminal-nier);
+  }
+
+  .font-noto-jp {
+    font-family: var(--font-noto-jp);
+    letter-spacing: -0.02em; /* Slight adjustment to mimic NieR style */
   }
 
   /* Background utilities */
@@ -72,45 +78,5 @@
   }
 
   /* Grid background utility */
-  .bg-nier-grid {
-    background-color: var(--color-nier-bg);
-    background-image: linear-gradient(var(--color-nier-grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--color-nier-grid) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
 
-  /* Button utilities */
-  .nier-button {
-    background-color: var(--color-nier-mid);
-    color: var(--color-nier-text-dark);
-    border: 1px solid var(--color-nier-border);
-    font-family: var(--font-terminal-retro);
-    text-transform: uppercase;
-    padding: 0.5rem 1rem;
-    transition: all 0.3s;
-  }
-
-  .nier-button:hover {
-    background-color: var(--color-nier-dark);
-    color: var(--color-nier-text-light);
-  }
-
-  .nier-button-active {
-    background-color: var(--color-nier-dark);
-    color: var(--color-nier-text-light);
-    border: 1px solid var(--color-nier-border);
-    font-family: var(--font-terminal-retro);
-    text-transform: uppercase;
-    padding: 0.5rem 1rem;
-  }
-
-  /* Interactive element focus styles */
-  .nier-focus-ring {
-    outline: none;
-  }
-
-  .nier-focus-ring:focus-visible {
-    outline: 2px solid var(--color-nier-dark);
-    outline-offset: 1px;
-  }
 }

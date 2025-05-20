@@ -6,6 +6,7 @@ module.exports = {
         terminal: ["JetBrains Mono", "monospace"],
         "terminal-retro": ["VT323", "monospace"],
         "terminal-nier": ["Major Mono Display", "monospace"],
+        "noto-jp": ["Noto Sans JP", "sans-serif"],
       },
       colors: {
         nier: {

@@ -1,2 +1,6 @@
-<button [class]="getButtonClass()"
-  (onClick)="handleClick()">{{label()}}</button>
+<button
+  class="w-48 text-left font-noto-jp text-base uppercase transition-all duration-300 bg-nier-mid text-nier-dark rounded-none button-hover p-1.5"
+  (click)="handleClick()"
+>
+  {{ label() }}
+</button>
