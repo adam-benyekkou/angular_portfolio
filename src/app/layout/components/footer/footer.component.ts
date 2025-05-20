@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import {FooterDisplayComponent} from '../../../features/footer-display/footer-display.component';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
+  imports: [FooterDisplayComponent],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  styleUrl: './footer.component.css',
 })
-export class FooterComponent {
-
-}
+export class FooterComponent {}

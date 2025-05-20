@@ -8,55 +8,56 @@
 @import "tailwindcss/preflight.css" layer(tailwind-base);
 @import "tailwindcss/utilities.css" layer(tailwind-utilities);
 
-/* Import the fonts first, outside any layer */
-
-/* Define variables in theme layer instead of base */
 @layer theme {
   :root {
-    /* Font variables - keeping these as they're good */
+    /* Font variables */
     --font-terminal: 'JetBrains Mono', monospace;
     --font-terminal-retro: 'VT323', monospace;
     --font-terminal-nier: 'Major Mono Display', monospace;
 
-    /* NieR Automata UI color scheme */
-    --color-nier-dark: #2a2a2a;        /* Dark background */
-    --color-nier-darker: #1f1f1f;      /* Darker background for contrast */
-    --color-nier-light: #e9dcc9;       /* Light parchment text color */
-    --color-nier-accent: #c8b086;      /* Golden tan accent */
-    --color-nier-highlight: #d9cdb9;   /* Brighter highlight for hover/focus */
-    --color-nier-subtle: #3a3a3a;      /* Slightly lighter than background for cards */
-    --color-nier-red: #9e3f3f;         /* For warnings/errors */
+    /* Authentic NieR Automata UI colors from screenshot */
+    --color-nier-bg: #dcd8c0;         /* Main parchment background */
+    --color-nier-dark: #5a5a50;       /* Dark UI elements */
+    --color-nier-mid: #adaba0;        /* Medium gray UI elements */
+    --color-nier-text-dark: #292925;  /* Dark text */
+    --color-nier-text-light: #dcd8c0; /* Light text */
+    --color-nier-border: #a39e8c;     /* Border color */
+    --color-nier-grid: #bfbcad;       /* Grid lines */
+    --color-nier-accent: #292925;     /* Dark accent */
+    --color-nier-highlight: #5a5a50;  /* Highlight for selection */
   }
 }
-
 @layer tailwind-utilities {
-  /* Add these to your custom utilities */
+  .bg-nier-bg {
+    background-color: var(--color-nier-bg);
+  }
+
   .bg-nier-dark {
     background-color: var(--color-nier-dark);
   }
 
-  .bg-nier-darker {
-    background-color: var(--color-nier-darker);
+  .bg-nier-mid {
+    background-color: var(--color-nier-mid);
   }
 
-  .bg-nier-subtle {
-    background-color: var(--color-nier-subtle);
+  .text-nier-dark {
+    color: var(--color-nier-text-dark);
   }
 
   .text-nier-light {
-    color: var(--color-nier-light);
+    color: var(--color-nier-text-light);
   }
 
-  .text-nier-accent {
-    color: var(--color-nier-accent);
+  .border-nier-border {
+    border-color: var(--color-nier-border);
   }
 
-  .text-nier-highlight {
-    color: var(--color-nier-highlight);
-  }
-
-  .border-nier-accent {
-    border-color: var(--color-nier-accent);
+  /* Grid background utility */
+  .bg-nier-grid {
+    background-color: var(--color-nier-bg);
+    background-image: linear-gradient(var(--color-nier-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-nier-grid) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }
 
