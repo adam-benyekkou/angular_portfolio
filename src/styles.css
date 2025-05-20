@@ -77,6 +77,23 @@
     border-color: var(--color-nier-accent);
   }
 
-  /* Grid background utility */
 
+  .checkered-background{
+    background-color: #d1cdb7;
+    background-size: 0.3rem 0.3rem;
+    background-image: linear-gradient(to right, #ccc8b1 1px, rgba(204,200,177,0) 1px),
+    linear-gradient(to bottom, #ccc8b1 1px, rgba(204,200,177,0) 1px);
+  }
+
+  .checkered-bg-dark {
+    background-color: #121210; /* Almost black background */
+    background-size: 4px 4px; /* Small grid pattern */
+    background-image: linear-gradient(to right, rgba(50, 50, 50, 0.3) 1px, rgba(0, 0, 0, 0) 1px),
+    linear-gradient(to bottom, rgba(50, 50, 50, 0.3) 1px, rgba(0, 0, 0, 0) 1px);
+    color: #bbb9ad; /* Light gray with slight sepia tone for text */
+    font-family: 'Major Mono Display', monospace; /* Using your terminal-nier font */
+    min-height: 100vh;
+    padding: 2rem;
+    position: relative;
+  }
 }
