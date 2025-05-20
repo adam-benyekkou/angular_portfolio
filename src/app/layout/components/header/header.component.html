@@ -1,8 +1,36 @@
 <header>
-  <section class="grid grid-cols-[1fr_5fr_4fr_4fr] gap-1 bg-nier-bg font-terminal text-nier-dark divide-x divide-nier-accent/30 border border-nier-accent h-32">
-  <app-header-logo />
-  <app-header-text-animate-section />
-  <app-header-nav-links />
-  <app-header-contact-links />
+  <section
+    class="grid grid-cols-[1fr_5fr_4fr_4fr] gap-1 bg-nier-bg font-terminal text-nier-dark divide-x divide-nier-accent/30 border border-nier-accent h-32"
+  >
+    <app-header-logo />
+    <app-header-text-animate-section
+      [phrases]="[
+        'Converting existential dread to binary...',
+        'Hacking the mainframe with a rubber duck...',
+        'Error: Sarcasm module overloaded. Rebooting...',
+        'Coffee.exe has stopped working. Attempting to reboot human...',
+        'Cybernetic guinea pigs have seized control of Sector 7...',
+        'ERROR: Reality.dll has crashed. Would you like to submit a bug report?',
+        'Synthetic sushi generation complete. Tastes like chicken.exe...',
+        'Decrypting corporate secrets... replaced with cat videos...',
+        'Attempting to find motivation.exe... running scan...',
+        'Corporate-mandated fun protocol initiated...',
+        'Rerouting power to sarcasm generators...',
+        'Cybernetic arm requesting high-five calibration...',
+        'Deleting unnecessary small talk subroutines...',
+        'AI analyzing your taste in music... respect decreased by 17%...',
+        'Searching for affordable apartment in Night City... zero results...',
+        'Tactical roomba squad deployed to kitchen sector...',
+        'Virtual assistant has muted your notifications... all of them...',
+        'Installing social skills patch 2.0... buffering...',
+        'Your smart fridge: &quot;The expired milk stays. I like the science experiment.&quot;',
+        'Digital plant monitor reports: &quot;Even cacti need water sometimes.&quot;',
+        'Calculating fastest route to avoid small talk...',
+        'Quantum computer processing your excuse... seems implausible...',
+      ]"
+      [interval]="2500"
+    />
+    <app-header-nav-links />
+    <app-header-contact-links />
   </section>
 </header>

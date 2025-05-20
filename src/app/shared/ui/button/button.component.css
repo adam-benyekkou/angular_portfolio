@@ -1,4 +1,35 @@
-.button-hover:hover {
+.button-custom {
+  cursor: pointer;
+  background-color: var(--color-nier-mid);
+  color: var(--color-nier-dark);
+  position: relative;
+  border: 1px solid transparent;
+  border-left: none;
+  border-right: none;
+  overflow: hidden;
+}
+
+.button-custom::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;  /* Space from top border */
+  bottom: 3px; /* Space from bottom border */
+  width: 0;
+  height: auto; /* This makes it respect top and bottom values */
   background-color: var(--color-nier-dark);
+  transition: width 0.2s ease;
+  z-index: 0;
+}
+
+.button-custom:hover,
+.button-custom:focus {
   color: var(--color-nier-text-light);
+  background-color: transparent;
+  border-color: var(--color-nier-dark);
+}
+
+.button-custom:hover::before,
+.button-custom:focus::before {
+  width: 100%;
 }

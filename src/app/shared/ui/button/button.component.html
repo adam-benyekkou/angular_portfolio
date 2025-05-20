@@ -1,6 +1,6 @@
 <button
-  class="w-48 text-left font-noto-jp text-base uppercase transition-all duration-300 bg-nier-mid text-nier-dark rounded-none button-hover p-1.5"
+  class="w-48 text-left font-noto-jp text-base uppercase transition-all duration-300 rounded-none p-1.5 button-custom"
   (click)="handleClick()"
 >
-  {{ label() }}
+  <span class="relative z-10">{{ label() }}</span>
 </button>
