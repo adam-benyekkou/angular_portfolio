@@ -1,15 +1,19 @@
+/* This simpler approach uses your existing global variables directly */
+
 .nier-logo-container {
   position: relative;
   display: inline-block;
   padding: 0.25rem;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .nier-logo {
   position: relative;
-  color: var(--nier-dark, #2C2A21); /* Using nier-dark color with fallback */
-  text-shadow: 0 0 2px rgba(44, 42, 33, 0.8);
+  color: var(--color-nier-text-dark); /* Use your global variable */
+  text-shadow: 0 0 2px var(--color-nier-text-dark);
   animation: nier-fade-in 2.5s ease-out forwards, nier-subtle-pulse 4s 2.5s infinite;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .nier-logo::before {
@@ -19,9 +23,10 @@
   top: 0;
   width: 100%;
   height: 100%;
-  text-shadow: 0 0 3px var(--nier-dark, #2C2A21);
+  text-shadow: 0 0 3px var(--color-nier-text-dark);
   opacity: 0;
   animation: nier-glitch 6s 3s infinite;
+  transition: text-shadow 0.3s ease;
 }
 
 .nier-logo::after {
@@ -31,9 +36,10 @@
   top: 0;
   width: 100%;
   height: 100%;
-  text-shadow: -1px 0 1px rgba(44, 42, 33, 0.6);
+  text-shadow: -1px 0 1px var(--color-nier-text-dark);
   opacity: 0;
   animation: nier-glitch-2 5s 3s infinite;
+  transition: text-shadow 0.3s ease;
 }
 
 .nier-scan-line {
@@ -45,12 +51,13 @@
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(44, 42, 33, 0.05) 50%,
+    color-mix(in srgb, var(--color-nier-text-dark) 5%, transparent) 50%,
     transparent 100%
   );
   animation: nier-scan 3s linear infinite;
   z-index: 2;
   pointer-events: none;
+  transition: background 0.3s ease;
 }
 
 .nier-blocks {
@@ -67,10 +74,11 @@
 .nier-blocks::after {
   content: "";
   position: absolute;
-  background: rgba(44, 42, 33, 0.1);
   width: 10px;
   height: 6px;
+  background: color-mix(in srgb, var(--color-nier-text-dark) 10%, transparent);
   animation: nier-blocks 10s linear infinite;
+  transition: background 0.3s ease;
 }
 
 .nier-blocks::before {
@@ -87,153 +95,7 @@
   animation-delay: 3s;
 }
 
-/* Animations */
-@keyframes nier-fade-in {
-  0% {
-    opacity: 0;
-    clip-path: inset(0 100% 0 0);
-  }
-  20% {
-    opacity: 0.3;
-    clip-path: inset(0 80% 0 0);
-  }
-  40% {
-    opacity: 0.5;
-    clip-path: inset(0 60% 0 0);
-  }
-  60% {
-    opacity: 0.7;
-    clip-path: inset(0 40% 0 0);
-  }
-  80% {
-    opacity: 0.9;
-    clip-path: inset(0 20% 0 0);
-  }
-  95% {
-    opacity: 1;
-    clip-path: inset(0 5% 0 0);
-  }
-  100% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-@keyframes nier-subtle-pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.9;
-  }
-}
-
-@keyframes nier-glitch {
-  0%, 100% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  10.5% {
-    opacity: 0.5;
-    transform: translateX(3px);
-  }
-  11% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  29.5% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  30% {
-    opacity: 0.4;
-    transform: translateX(-3px);
-  }
-  30.5% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  80% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  80.5% {
-    opacity: 0.6;
-    transform: translateX(5px);
-  }
-  81% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-}
-
-@keyframes nier-glitch-2 {
-  0%, 100% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  10.5% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  11% {
-    opacity: 0.4;
-    transform: translateX(-2px);
-  }
-  11.5% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  50% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-  50.5% {
-    opacity: 0.4;
-    transform: translateX(2px);
-  }
-  51% {
-    opacity: 0;
-    transform: translateX(0);
-  }
-}
-
-@keyframes nier-scan {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes nier-blocks {
-  0% {
-    opacity: 0;
-    transform: translateY(0) translateX(0);
-  }
-  10% {
-    opacity: 0.8;
-  }
-  30% {
-    opacity: 0.6;
-    transform: translateY(20px) translateX(10px);
-  }
-  50% {
-    opacity: 0.4;
-    transform: translateY(40px) translateX(20px);
-  }
-  70% {
-    opacity: 0.2;
-    transform: translateY(60px) translateX(30px);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(100px) translateX(40px);
-  }
-}
-
-/* Add this for the small border and interface details */
+/* Border and interface details */
 .nier-logo-container::before {
   content: "";
   position: absolute;
@@ -241,11 +103,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(44, 42, 33, 0.3);
+  border: 1px solid var(--color-nier-border);
   pointer-events: none;
+  transition: border-color 0.3s ease;
 }
 
-/* Optional: Add small interface dots in the corner */
+/* Interface dots in the corner */
 .nier-logo-container::after {
   content: "";
   position: absolute;
@@ -253,12 +116,65 @@
   right: 5px;
   width: 3px;
   height: 3px;
-  background-color: rgba(44, 42, 33, 0.6);
+  background-color: var(--color-nier-text-dark);
   box-shadow:
-    -6px 0 0 rgba(44, 42, 33, 0.6),
-    -12px 0 0 rgba(44, 42, 33, 0.6),
-    0 6px 0 rgba(44, 42, 33, 0.6),
-    -6px 6px 0 rgba(44, 42, 33, 0.6),
-    -12px 6px 0 rgba(44, 42, 33, 0.6);
+    -6px 0 0 var(--color-nier-text-dark),
+    -12px 0 0 var(--color-nier-text-dark),
+    0 6px 0 var(--color-nier-text-dark),
+    -6px 6px 0 var(--color-nier-text-dark),
+    -12px 6px 0 var(--color-nier-text-dark);
   pointer-events: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Animations unchanged */
+@keyframes nier-fade-in {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); }
+  20% { opacity: 0.3; clip-path: inset(0 80% 0 0); }
+  40% { opacity: 0.5; clip-path: inset(0 60% 0 0); }
+  60% { opacity: 0.7; clip-path: inset(0 40% 0 0); }
+  80% { opacity: 0.9; clip-path: inset(0 20% 0 0); }
+  95% { opacity: 1; clip-path: inset(0 5% 0 0); }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+@keyframes nier-subtle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes nier-glitch {
+  0%, 100% { opacity: 0; transform: translateX(0); }
+  10.5% { opacity: 0.5; transform: translateX(3px); }
+  11% { opacity: 0; transform: translateX(0); }
+  29.5% { opacity: 0; transform: translateX(0); }
+  30% { opacity: 0.4; transform: translateX(-3px); }
+  30.5% { opacity: 0; transform: translateX(0); }
+  80% { opacity: 0; transform: translateX(0); }
+  80.5% { opacity: 0.6; transform: translateX(5px); }
+  81% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes nier-glitch-2 {
+  0%, 100% { opacity: 0; transform: translateX(0); }
+  10.5% { opacity: 0; transform: translateX(0); }
+  11% { opacity: 0.4; transform: translateX(-2px); }
+  11.5% { opacity: 0; transform: translateX(0); }
+  50% { opacity: 0; transform: translateX(0); }
+  50.5% { opacity: 0.4; transform: translateX(2px); }
+  51% { opacity: 0; transform: translateX(0); }
+}
+
+@keyframes nier-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes nier-blocks {
+  0% { opacity: 0; transform: translateY(0) translateX(0); }
+  10% { opacity: 0.8; }
+  30% { opacity: 0.6; transform: translateY(20px) translateX(10px); }
+  50% { opacity: 0.4; transform: translateY(40px) translateX(20px); }
+  70% { opacity: 0.2; transform: translateY(60px) translateX(30px); }
+  100% { opacity: 0; transform: translateY(100px) translateX(40px); }
 }

@@ -5,37 +5,50 @@
   transition: transform 0.2s ease;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+
+  /* Add these properties to match button-custom */
+  border: 1px solid transparent;
+  border-left: none;
+  border-right: none;
 }
 
-/* Add .svg-icon class to target just the SVGs */
+/* SVG icon styling */
 .svg-icon {
-  transition: filter 0.3s ease;
+  fill: var(--color-nier-dark, #5a5a50);
+  position: relative;
+  z-index: 1;
+  transition: fill 0.3s ease;
 }
 
-/* Change SVG color on hover using filter */
-.svg-button-container:hover .svg-icon,
-.svg-button-container:active .svg-icon {
-  /* This creates a light beige/sepia filter similar to nier-light */
-  filter: invert(80%) sepia(12%) saturate(176%) hue-rotate(343deg)
-    brightness(106%) contrast(97%);
-}
-
-/* Background fill effect */
+/* Background fill effect - matching button-custom */
 .svg-button-container::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 3px;
-  bottom: 3px;
+  top: 3px;  /* Space from top border */
+  bottom: 3px; /* Space from bottom border */
   width: 0;
-  height: auto;
+  height: auto; /* This makes it respect top and bottom values */
   background-color: var(--color-nier-dark, rgba(30, 30, 30, 0.8));
   transition: width 0.2s ease;
   z-index: 0;
 }
 
-.svg-button-container:hover::before {
+/* Hover state */
+.svg-button-container:hover,
+.svg-button-container:focus {
+  border-color: var(--color-nier-dark);
+}
+
+.svg-button-container:hover::before,
+.svg-button-container:focus::before {
   width: 100%;
+}
+
+/* Change SVG fill on hover */
+.svg-button-container:hover .svg-icon,
+.svg-button-container:active .svg-icon {
+  fill: var(--color-nier-text-light, #dcd8c0);
 }
 
 /* Glitch effect on hover */
@@ -81,8 +94,7 @@
 
 /* The glitch effect animation */
 @keyframes nier-button-glitch {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0;
     transform: translateX(0);
     clip-path: inset(0 0 0 0);
@@ -130,7 +142,7 @@
 
 /* Button click effect */
 .svg-button-container:active {
-  transform: scale(0.95);
+  transform: scale(0.98);
 }
 
 .svg-button-container:active::after {
@@ -163,172 +175,126 @@
   .svg-button-container:active .scan-line {
     animation: nier-button-scan 0.3s ease forwards;
   }
+
+  .svg-button-container:active .svg-icon {
+    fill: var(--color-nier-dark, #dcd8c0);
+  }
 }
 
-.nier-link {
+/* Styling for text links with NieR aesthetic */
+a[data-label] {
   position: relative;
   cursor: pointer;
-  color: var(--color-nier-dark, #333);
-  transition: color 0.2s ease;
   overflow: hidden;
-  display: inline-block;
-  -webkit-tap-highlight-color: transparent;
-  text-decoration: none;
+  transition: color 0.3s ease;
   padding: 0 2px;
-  font-weight: 500;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  border-bottom: 1px solid transparent;
 }
 
 /* Underline effect */
-.nier-link::before {
+a[data-label]::before {
   content: "";
   position: absolute;
   left: 0;
   bottom: 0;
   width: 0;
   height: 1px;
-  background-color: var(--color-nier-darker, #111);
-  transition: width 0.2s ease;
+  background-color: var(--color-nier-dark, #5a5a50);
+  transition: width 0.3s ease;
   z-index: 0;
 }
 
-.nier-link:hover,
-.nier-link:focus {
-  color: var(--color-nier-darker, #111);
-  outline: none;
-  font-weight: 600;
+/* Text color change on hover */
+a[data-label]:hover {
+  color: var(--color-nier-dark, #dcd8c0);
+  border-bottom-color: var(--color-nier-dark);
 }
 
-.nier-link:hover::before,
-.nier-link:focus::before {
+/* Underline animation on hover */
+a[data-label]:hover::before {
   width: 100%;
-  height: 1px;
 }
 
-/* Glitch effect on hover */
-.nier-link::after {
-  content: attr(data-label);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  color: var(--color-nier-darker, #111);
-  opacity: 0;
-  z-index: 2;
-  pointer-events: none;
-  font-weight: 600;
+/* Glitch effect on hover (similar to buttons) */
+a[data-label]:hover span:first-child {
+  animation: nier-text-glitch 0.6s ease;
 }
 
-.nier-link:hover::after {
-  animation: nier-link-glitch 0.6s ease forwards;
-}
-
-/* Subtle scan line on hover */
-.nier-link .scan-line {
+/* Scan line for links */
+a[data-label] .scan-line {
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 1px;
-  background-color: var(--color-nier-darker, #111);
+  background-color: var(--color-nier-dark, rgba(230, 230, 230, 0.9));
   opacity: 0;
   z-index: 3;
   pointer-events: none;
 }
 
-.nier-link:hover .scan-line {
-  animation: nier-link-scan 0.3s ease forwards;
+a[data-label]:hover .scan-line {
+  animation: nier-button-scan 0.3s ease forwards;
 }
 
-/* Glitch effect animation */
-@keyframes nier-link-glitch {
+/* Text glitch animation for links */
+@keyframes nier-text-glitch {
   0%, 100% {
-    opacity: 0;
     transform: translateX(0);
     clip-path: inset(0 0 0 0);
   }
   10% {
-    opacity: 0.3;
-    transform: translateX(-1px);
-    clip-path: inset(10% 0 80% 0);
+    transform: translateX(-2px);
+    clip-path: inset(0 0 40% 0);
   }
-  12% {
-    opacity: 0;
+  15% {
     transform: translateX(0);
   }
   20% {
-    opacity: 0.3;
     transform: translateX(1px);
-    clip-path: inset(30% 0 50% 0);
+    clip-path: inset(40% 0 0 0);
   }
-  22% {
-    opacity: 0;
+  25% {
     transform: translateX(0);
   }
   30% {
-    opacity: 0.2;
     transform: translateX(-1px);
-    clip-path: inset(50% 0 20% 0);
+    clip-path: inset(20% 0 20% 0);
   }
-  32% {
-    opacity: 0;
+  35% {
     transform: translateX(0);
   }
 }
 
-/* Scan line animation */
-@keyframes nier-link-scan {
-  0% {
-    opacity: 0.6;
-    left: -100%;
-  }
-  100% {
-    opacity: 0;
-    left: 100%;
-  }
-}
-
-/* Click effect */
-.nier-link:active {
-  transform: translateY(1px);
-  color:  #111;
-}
-
-.nier-link:active::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  animation: nier-link-flash 0.2s ease;
-}
-
-@keyframes nier-link-flash {
-  0% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 0;
-  }
+/* Active/click state for links */
+a[data-label]:active {
+  transform: scale(0.98);
 }
 
 /* Touch device optimization */
 @media (hover: none) {
-  .nier-link:active::before {
+  a[data-label]:active::before {
     width: 100%;
   }
 
-  .nier-link:active {
-    color: var(--color-nier-darker, #111);
-    font-weight: 600;
+  a[data-label]:active .scan-line {
+    animation: nier-button-scan 0.3s ease forwards;
   }
 
-  .nier-link:active .scan-line {
-    animation: nier-link-scan 0.3s ease forwards;
+  a[data-label]:active {
+    color: var(--color-nier-dark, #dcd8c0);
   }
+}
+
+.icon-email {
+  width: 150px;
+  height: 150px;
+  background-color: var(--color-nier-text-dark);
+  -webkit-mask: url('/email_qr_black.svg') no-repeat center;
+  mask: url('/email_qr_black.svg') no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }

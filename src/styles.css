@@ -24,8 +24,68 @@
     --color-nier-grid: #bfbcad;       /* Grid lines */
     --color-nier-accent: #292925;     /* Dark accent */
     --color-nier-highlight: #5a5a50;  /* Highlight for selection */
+
+    /* Checkered background colors */
+    --color-nier-checkered-bg: #d1cdb7;       /* Slightly darker than main bg */
+    --color-nier-checkered-grid: #ccc8b1;     /* Grid lines for checkered pattern */
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Inverted colors for dark mode */
+    --color-nier-bg: #292925;         /* Inverted from text-dark */
+    --color-nier-dark: #adaba0;       /* Inverted from mid */
+    --color-nier-mid: #5a5a50;        /* Inverted from dark */
+    --color-nier-text-dark: #dcd8c0;  /* Inverted from bg */
+    --color-nier-text-light: #292925; /* Inverted from text-dark */
+    --color-nier-border: #5a5a50;     /* Darkened border */
+    --color-nier-grid: #3f3e39;       /* Darkened grid */
+    --color-nier-accent: #dcd8c0;     /* Inverted from accent */
+    --color-nier-highlight: #adaba0;  /* Inverted from highlight */
+
+    /* Inverted checkered background colors */
+    --color-nier-checkered-bg: #121210;       /* Dark background for checkered pattern */
+    --color-nier-checkered-grid: #323232;     /* Grid lines for dark checkered pattern */
+  }
+}
+
+/* Manual dark mode class for toggle functionality */
+.dark {
+  /* Same inverted colors as media query */
+  --color-nier-bg: #292925;         /* Inverted from text-dark */
+  --color-nier-dark: #adaba0;       /* Inverted from mid */
+  --color-nier-mid: #5a5a50;        /* Inverted from dark */
+  --color-nier-text-dark: #dcd8c0;  /* Inverted from bg */
+  --color-nier-text-light: #292925; /* Inverted from text-dark */
+  --color-nier-border: #5a5a50;     /* Darkened border */
+  --color-nier-grid: #3f3e39;       /* Darkened grid */
+  --color-nier-accent: #dcd8c0;     /* Inverted from accent */
+  --color-nier-highlight: #adaba0;  /* Inverted from highlight */
+
+  /* Inverted checkered background colors */
+  --color-nier-checkered-bg: #121210;       /* Dark background for checkered pattern */
+  --color-nier-checkered-grid: #323232;     /* Grid lines for dark checkered pattern */
+}
+
+/* Light mode class to override system preference */
+.light {
+  /* Original colors */
+  --color-nier-bg: #dcd8c0;         /* Main parchment background */
+  --color-nier-dark: #5a5a50;       /* Dark UI elements */
+  --color-nier-mid: #adaba0;        /* Medium gray UI elements */
+  --color-nier-text-dark: #292925;  /* Dark text */
+  --color-nier-text-light: #dcd8c0; /* Light text */
+  --color-nier-border: #a39e8c;     /* Border color */
+  --color-nier-grid: #bfbcad;       /* Grid lines */
+  --color-nier-accent: #292925;     /* Dark accent */
+  --color-nier-highlight: #5a5a50;  /* Highlight for selection */
+
+  /* Checkered background colors */
+  --color-nier-checkered-bg: #d1cdb7;       /* Slightly darker than main bg */
+  --color-nier-checkered-grid: #ccc8b1;     /* Grid lines for checkered pattern */
+}
+
 
 @layer tailwind-utilities {
   /* Font utilities */
@@ -77,23 +137,24 @@
     border-color: var(--color-nier-accent);
   }
 
-
-  .checkered-background{
-    background-color: #d1cdb7;
+  /* Checkered background using theme variables */
+  .checkered-background {
+    background-color: var(--color-nier-checkered-bg);
     background-size: 0.3rem 0.3rem;
-    background-image: linear-gradient(to right, #ccc8b1 1px, rgba(204,200,177,0) 1px),
-    linear-gradient(to bottom, #ccc8b1 1px, rgba(204,200,177,0) 1px);
+    background-image: linear-gradient(to right, var(--color-nier-checkered-grid) 1px, rgba(0, 0, 0, 0) 1px),
+    linear-gradient(to bottom, var(--color-nier-checkered-grid) 1px, rgba(0, 0, 0, 0) 1px);
+    color: var(--color-nier-text-dark);
+    transition: background-color 0.3s ease, background-image 0.3s ease, color 0.3s ease;
   }
 
-  .checkered-bg-dark {
-    background-color: #121210; /* Almost black background */
-    background-size: 4px 4px; /* Small grid pattern */
-    background-image: linear-gradient(to right, rgba(50, 50, 50, 0.3) 1px, rgba(0, 0, 0, 0) 1px),
-    linear-gradient(to bottom, rgba(50, 50, 50, 0.3) 1px, rgba(0, 0, 0, 0) 1px);
-    color: #bbb9ad; /* Light gray with slight sepia tone for text */
-    font-family: 'Major Mono Display', monospace; /* Using your terminal-nier font */
-    min-height: 100vh;
-    padding: 2rem;
-    position: relative;
+  /* Additional utility for grid-based layouts */
+  .nier-grid {
+    display: grid;
+    background-color: var(--color-nier-bg);
+    background-size: 2rem 2rem;
+    background-image: linear-gradient(to right, var(--color-nier-grid) 1px, rgba(0, 0, 0, 0) 1px),
+    linear-gradient(to bottom, var(--color-nier-grid) 1px, rgba(0, 0, 0, 0) 1px);
+    border: 1px solid var(--color-nier-border);
+    transition: all 0.3s ease;
   }
 }
