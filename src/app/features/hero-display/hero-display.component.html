@@ -1,4 +1,15 @@
 <section class="">
-  <article class="border-b-1 h-100 flex items-center justify-center"><p class="text-9xl font-terminal-retro">HERO SECTION</p></article>
-  <article class="border-b-1 h-100 flex items-center justify-center checkered-bg-dark"><p class="font-terminal-nier text-9xl">CREATIVE DEVELOPER</p></article>
+  <!-- Video Section -->
+  <article class="border-b h-[40vh] sm:h-[60vh] md:h-[50vh] flex items-center justify-center">
+    <app-holo-video-container containerClasses="w-full aspect-video" videoSrc="cyber_hands.mp4" />
+  </article>
+
+  <!-- Display Text Section -->
+  <article class="flex-1 flex items-center justify-center checkered-bg-dark py-4 sm:py-8 md:py-12">
+    <p class="font-terminal-nier scramble-text-glow
+              text-6xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl
+              text-center px-4 leading-tight">
+      {{ displayText }}
+    </p>
+  </article>
 </section>
