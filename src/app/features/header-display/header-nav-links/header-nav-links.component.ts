@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-
-import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { NavButtonComponent } from '../../../shared/ui/button/nav-button.component';
 
 @Component({
   selector: 'app-header-nav-links',
-  imports: [ButtonComponent],
+  imports: [NavButtonComponent],
   templateUrl: './header-nav-links.component.html',
   styleUrl: './header-nav-links.component.css',
 })

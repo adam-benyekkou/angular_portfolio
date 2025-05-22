@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {MainLayoutComponent} from './layout/components/main-layout/main-layout.component';
+import { FooterComponent } from './layout/components/footer/footer.component';
+import { HeaderComponent } from './layout/components/header/header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MainLayoutComponent],
+  imports: [RouterOutlet, FooterComponent, HeaderComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'Adam Benyekkou Portfolio';

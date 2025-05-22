@@ -4,7 +4,7 @@
     class="md:hidden grid grid-cols-1 bg-nier-bg font-terminal text-nier-dark border border-nier-accent overflow-hidden"
   >
     <div class="flex justify-center py-3 border-b border-nier-accent/30">
-      <app-header-logo />
+      <app-header-logo routerLink="" />
     </div>
     <div class="py-3 border-b border-nier-accent/30 min-h-[100px]">
       <app-header-text-animate-section
@@ -137,20 +137,3 @@
   </section>
 </header>
 
-<style>
-  /* QR Code size control for mobile */
-  @media (max-width: 767px) {
-    /* Target QR code image inside contact links - assumes proper structure */
-    app-header-contact-links img {
-      max-width: 80px;
-      height: auto;
-    }
-  }
-
-  /* Additional styles for better typography and spacing */
-  @media (min-width: 1024px) {
-    app-header-text-animate-section {
-      width: 100%;
-    }
-  }
-</style>

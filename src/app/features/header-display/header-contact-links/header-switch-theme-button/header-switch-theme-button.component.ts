@@ -1,4 +1,4 @@
-// header-switch-theme-button.component.ts
+// header-switch-theme-nav-button.component.ts
 import { Component, OnInit } from '@angular/core';
 
 @Component({

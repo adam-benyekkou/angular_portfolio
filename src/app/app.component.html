@@ -6,8 +6,14 @@
   <title>{{title}}</title>
 </head>
 <body>
-<app-main-layout/>
+<app-header />
+<main class="bg-nier-bg checkered-background">
+  <div class="route-container">
+  <router-outlet />
+  </div>
+</main>
+<app-footer />
 </body>
 </html>
 
-<router-outlet />
+
