@@ -1,7 +1,6 @@
-
 <div class="typewriter-container">
-  @for (item of displayedTexts(); track item.id) {
-    <div class="typewriter-item">
+  @for (item of currentTexts(); track item.id) {
+    <div class="typewriter-item" [@slideIn]>
       <div class="text-scroller-text font-noto-jp text-sm">
         {{ item.displayed }}
         @if (item.isTyping) {

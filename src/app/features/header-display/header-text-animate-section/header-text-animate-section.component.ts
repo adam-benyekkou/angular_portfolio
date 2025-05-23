@@ -6,6 +6,8 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  computed,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   trigger,
@@ -16,12 +18,20 @@ import {
 } from '@angular/animations';
 
 interface TextItem {
-  id: number;
-  text: string;
-  displayed: string;
-  isTyping: boolean;
-  isComplete: boolean;
+  readonly id: number;
+  readonly text: string;
+  readonly displayed: string;
+  readonly isTyping: boolean;
+  readonly isComplete: boolean;
 }
+
+// Constants for better maintainability
+const TYPING_DELAYS = {
+  GLITCH: { min: 150, max: 200, probability: 0.03 },
+  RAPID: { min: 5, max: 15, probability: 0.5 },
+  SLOW: { min: 50, max: 80, probability: 0.15 },
+  STUTTER: { delay: 200, probability: 0.02 },
+} as const;
 
 @Component({
   selector: 'app-header-text-animate-section',
@@ -29,6 +39,7 @@ interface TextItem {
   imports: [],
   templateUrl: './header-text-animate-section.component.html',
   styleUrl: './header-text-animate-section.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('textChange', [
       state(
@@ -45,13 +56,24 @@ interface TextItem {
           transform: 'translateY(20px)',
         }),
       ),
-      transition('visible => hidden', [animate('0.5s ease-out')]),
-      transition('hidden => visible', [animate('0.5s ease-in')]),
+      transition('visible => hidden', animate('300ms ease-out')),
+      transition('hidden => visible', animate('300ms ease-in')),
+    ]),
+    // Add fade-in animation for new text items
+    trigger('slideIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(10px)' }),
+        animate(
+          '200ms ease-out',
+          style({ opacity: 1, transform: 'translateY(0)' }),
+        ),
+      ]),
     ]),
   ],
 })
 export class HeaderTextAnimateSectionComponent implements OnInit, OnDestroy {
-  phrases = input<string[]>([
+  // Input signals with better defaults
+  phrases = input<readonly string[]>([
     'Uploading guinea pig consciousness to the cloud...',
     'Error: Sarcasm module overloaded. Rebooting...',
     'Downloading personalities... 404: Personality not found.',
@@ -62,73 +84,75 @@ export class HeaderTextAnimateSectionComponent implements OnInit, OnDestroy {
     'Cybernetic guinea pigs have seized control of Sector 7...',
     'ERROR: Reality.dll has crashed. Would you like to submit a bug report?',
     'Synthetic sushi generation complete. Tastes like chicken.exe...',
-  ]);
+  ] as const);
 
-  interval = input<number>(3000); // Default interval of 3 seconds
-  typingSpeed = input<number>(30); // Time in ms between each character (faster than before)
-  maxDisplayedTexts = input<number>(4); // Maximum number of texts to display
+  interval = input<number>(2500);
+  typingSpeed = input<number>(25);
+  maxDisplayedTexts = input<number>(4);
 
-  // Signals for internal state
-  displayedTexts = signal<TextItem[]>([]);
-  nextId = signal<number>(0);
-  phraseIndex = signal<number>(0);
-  isTypingInProgress = signal<boolean>(false);
+  // State signals
+  private readonly displayedTexts = signal<readonly TextItem[]>([]);
+  private readonly nextId = signal<number>(0);
+  private readonly phraseIndex = signal<number>(0);
+  private readonly isTypingInProgress = signal<boolean>(false);
 
-  private typewriterTimeouts: number[] = [];
-  private nextTextTimeout: any;
+  // Computed signals for better performance
+  readonly currentTexts = computed(() => this.displayedTexts());
+  readonly hasTexts = computed(() => this.displayedTexts().length > 0);
+
+  // Timeout management
+  private readonly activeTimeouts = new Set<number>();
+  private nextTextTimeout?: number;
 
   constructor() {
-    // Use effect to react to changes in phrases
+    // Initialize first text when phrases are available
     effect(() => {
       const phrasesList = this.phrases();
       if (phrasesList.length > 0 && this.displayedTexts().length === 0) {
-        this.startNextText();
+        this.scheduleNextText(0); // Start immediately
       }
     });
   }
 
   ngOnInit(): void {
-    if (this.phrases().length) {
-      this.startTextRotation();
-    }
+    // Component initialization handled in constructor effect
   }
 
   ngOnDestroy(): void {
-    this.stopTextRotation();
-    this.clearTypewriterTimeouts();
+    this.cleanup();
   }
 
-  private startTextRotation(): void {
-    // Start with the first text
-    this.startNextText();
-  }
+  private cleanup(): void {
+    // Clear all timeouts
+    this.activeTimeouts.forEach((id) => window.clearTimeout(id));
+    this.activeTimeouts.clear();
 
-  private stopTextRotation(): void {
     if (this.nextTextTimeout) {
-      clearTimeout(this.nextTextTimeout);
+      window.clearTimeout(this.nextTextTimeout);
+      this.nextTextTimeout = undefined;
     }
   }
 
-  private clearTypewriterTimeouts(): void {
-    this.typewriterTimeouts.forEach((id) => window.clearTimeout(id));
-    this.typewriterTimeouts = [];
+  private scheduleNextText(delay: number = this.interval()): void {
+    if (this.nextTextTimeout) {
+      window.clearTimeout(this.nextTextTimeout);
+    }
+
+    this.nextTextTimeout = window.setTimeout(() => {
+      this.startNextText();
+    }, delay);
   }
 
   private startNextText(): void {
-    // If we're already typing, don't start a new one
     if (this.isTypingInProgress()) return;
 
     const phrasesList = this.phrases();
     if (phrasesList.length === 0) return;
 
-    // Get the next phrase to display
-    const index = this.phraseIndex();
-    const nextText = phrasesList[index];
+    const currentIndex = this.phraseIndex();
+    const nextText = phrasesList[currentIndex];
 
-    // Update the index for the next time
-    this.phraseIndex.update((idx) => (idx + 1) % phrasesList.length);
-
-    // Create a new text item
+    // Create immutable text item
     const newItem: TextItem = {
       id: this.nextId(),
       text: nextText,
@@ -137,44 +161,40 @@ export class HeaderTextAnimateSectionComponent implements OnInit, OnDestroy {
       isComplete: false,
     };
 
-    // Update the nextId for the next time
+    // Update state atomically
+    this.phraseIndex.update((idx) => (idx + 1) % phrasesList.length);
     this.nextId.update((id) => id + 1);
+    this.isTypingInProgress.set(true);
 
-    // Add the new text to the displayed texts list
+    // Update displayed texts with proper cleanup
     this.displayedTexts.update((texts) => {
-      // If we already have the maximum number of texts, remove the oldest one
-      if (texts.length >= this.maxDisplayedTexts()) {
-        return [...texts.slice(1), newItem];
+      const maxTexts = this.maxDisplayedTexts();
+      if (texts.length >= maxTexts) {
+        return [...texts.slice(texts.length - maxTexts + 1), newItem];
       }
-
-      // Otherwise, just add the new text
       return [...texts, newItem];
     });
 
-    // Set typing in progress
-    this.isTypingInProgress.set(true);
-
-    // Start the typewriter effect
-    this.typeText(newItem.id);
+    // Start typing animation
+    this.animateText(newItem.id);
   }
 
-  private typeText(textId: number): void {
+  private animateText(textId: number): void {
     const texts = this.displayedTexts();
     const textIndex = texts.findIndex((t) => t.id === textId);
 
     if (textIndex === -1) return;
 
     const textItem = texts[textIndex];
-    const fullText = textItem.text;
-    const currentLength = textItem.displayed.length;
+    const { text, displayed } = textItem;
+    const nextCharIndex = displayed.length;
 
-    if (currentLength < fullText.length) {
-      // Add one character
-      const newDisplayed = fullText.substring(0, currentLength + 1);
+    if (nextCharIndex < text.length) {
+      // Update displayed text
+      const newDisplayed = text.substring(0, nextCharIndex + 1);
 
-      // Update the text
-      this.displayedTexts.update((texts) => {
-        const updatedTexts = [...texts];
+      this.displayedTexts.update((currentTexts) => {
+        const updatedTexts = [...currentTexts];
         updatedTexts[textIndex] = {
           ...textItem,
           displayed: newDisplayed,
@@ -182,63 +202,76 @@ export class HeaderTextAnimateSectionComponent implements OnInit, OnDestroy {
         return updatedTexts;
       });
 
-      // Hectic typing effect with much more randomization
-      // Occasionally pause, sometimes type very fast, sometimes slower
-      let nextDelay: number;
-
-      // Random chance for different typing behaviors
-      const randomFactor = Math.random();
-
-      if (randomFactor < 0.05) {
-        // Longer pause (glitch effect) - reduced probability and duration
-        nextDelay = 200 + Math.random() * 150;
-      } else if (randomFactor < 0.5) {
-        // Rapid typing burst - increased probability
-        nextDelay = 5 + Math.random() * 15;
-      } else if (randomFactor < 0.65) {
-        // Slow typing - reduced probability and duration
-        nextDelay = 70 + Math.random() * 50;
-      } else {
-        // Normal typing speed with some variation - faster base speed
-        nextDelay = this.typingSpeed() + Math.random() * 40 - 20;
-      }
-
-      // Occasionally "glitch" and add brief pause before continuing - reduced probability
-      if (Math.random() < 0.03) {
-        // Add a brief stutter (simulate buffering) - shorter pause
-        nextDelay += 250;
-      }
-
+      // Schedule next character with dynamic timing
+      const delay = this.calculateTypingDelay();
       const timeoutId = window.setTimeout(() => {
-        this.typeText(textId);
-      }, nextDelay);
+        this.animateText(textId);
+      }, delay);
 
-      this.typewriterTimeouts.push(timeoutId);
+      this.activeTimeouts.add(timeoutId);
     } else {
-      // Text is complete
-      this.displayedTexts.update((texts) => {
-        const updatedTexts = [...texts];
-        updatedTexts[textIndex] = {
-          ...textItem,
-          isTyping: false,
-          isComplete: true,
-        };
-        return updatedTexts;
-      });
-
-      // Typing is no longer in progress
-      this.isTypingInProgress.set(false);
-
-      // Schedule the next text after the interval
-      this.nextTextTimeout = setTimeout(() => {
-        this.clearTypewriterTimeouts(); // Clear any remaining timeouts
-        this.startNextText();
-      }, this.interval());
+      // Text complete
+      this.completeText(textIndex, textItem);
     }
   }
 
-  // Helper method to track items
-  trackByTextId(index: number, item: TextItem): number {
-    return item.id;
+  private calculateTypingDelay(): number {
+    const random = Math.random();
+    const baseSpeed = this.typingSpeed();
+
+    // Apply different typing patterns based on probability
+    if (random < TYPING_DELAYS.GLITCH.probability) {
+      return (
+        TYPING_DELAYS.GLITCH.min +
+        Math.random() * (TYPING_DELAYS.GLITCH.max - TYPING_DELAYS.GLITCH.min)
+      );
+    }
+
+    if (random < TYPING_DELAYS.RAPID.probability) {
+      return (
+        TYPING_DELAYS.RAPID.min +
+        Math.random() * (TYPING_DELAYS.RAPID.max - TYPING_DELAYS.RAPID.min)
+      );
+    }
+
+    if (
+      random <
+      TYPING_DELAYS.RAPID.probability + TYPING_DELAYS.SLOW.probability
+    ) {
+      return (
+        TYPING_DELAYS.SLOW.min +
+        Math.random() * (TYPING_DELAYS.SLOW.max - TYPING_DELAYS.SLOW.min)
+      );
+    }
+
+    // Normal typing with variation
+    let delay = baseSpeed + (Math.random() * 30 - 15);
+
+    // Add occasional stutter effect
+    if (Math.random() < TYPING_DELAYS.STUTTER.probability) {
+      delay += TYPING_DELAYS.STUTTER.delay;
+    }
+
+    return Math.max(delay, 1); // Ensure positive delay
   }
+
+  private completeText(textIndex: number, textItem: TextItem): void {
+    // Mark text as complete
+    this.displayedTexts.update((texts) => {
+      const updatedTexts = [...texts];
+      updatedTexts[textIndex] = {
+        ...textItem,
+        isTyping: false,
+        isComplete: true,
+      };
+      return updatedTexts;
+    });
+
+    // Reset typing state and schedule next text
+    this.isTypingInProgress.set(false);
+    this.scheduleNextText();
+  }
+
+  // Optimized tracking function
+  trackByTextId = (index: number, item: TextItem): number => item.id;
 }

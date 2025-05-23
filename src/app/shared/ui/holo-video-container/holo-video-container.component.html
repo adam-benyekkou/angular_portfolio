@@ -10,20 +10,6 @@
       </div>
     }
 
-    <div class="absolute top-2 right-2 bg-black/80 border border-gray-600 rounded p-2 backdrop-blur-sm z-10">
-      <input
-        type="file"
-        accept="video/*"
-        (change)="onVideoFileSelect($event)"
-        #videoInput
-        class="hidden">
-      <button
-        class="bg-gray-700 text-white border border-gray-500 px-3 py-1 rounded text-xs transition-all duration-300 hover:bg-gray-600 hover:border-gray-400 active:translate-y-px disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-gray-700 disabled:hover:border-gray-500"
-        (click)="videoInput.click()"
-        [disabled]="isLoadingValue">
-        📁
-      </button>
     </div>
   </div>
-</div>
 </div>

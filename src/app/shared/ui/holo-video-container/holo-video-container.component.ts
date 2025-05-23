@@ -22,7 +22,7 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
   @Input() videoSrc?: string;
-  @Input() containerClasses: string = 'w-full h-96'; // Default with height
+  @Input() containerClasses: string = 'w-full h-96';
 
   isLoading = signal(false);
 
@@ -38,19 +38,16 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     geometry: THREE.BufferGeometry;
   }> = [];
 
-  // Side decorations
-  private sideElements: THREE.Group[] = [];
-
   private animationId: number = 0;
   private video!: HTMLVideoElement;
   private canvas2D!: HTMLCanvasElement;
   private ctx2D!: CanvasRenderingContext2D;
 
-  readonly GRID_WIDTH = 320; // Increased from 240 for wider coverage
+  readonly GRID_WIDTH = 320;
   readonly GRID_HEIGHT = 180;
   readonly POINTS_COUNT = this.GRID_WIDTH * this.GRID_HEIGHT;
 
-  // Mouse and effects
+  // Enhanced mouse and effects
   private mouseX = 0;
   private mouseY = 0;
   private isMouseOverCanvas = false;
@@ -58,10 +55,21 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   private glitchIntensity = 0;
   private resizeObserver!: ResizeObserver;
 
+  // Enhanced scatter properties
+  private scatterIntensityMap = new Float32Array(this.POINTS_COUNT);
+  private scatterDecayMap = new Float32Array(this.POINTS_COUNT);
+  private readonly MAX_SCATTER_DISTANCE = 600; // Increased scatter range
+  private readonly SCATTER_STRENGTH = 45; // Much stronger scatter
+  private readonly GLOW_INTENSITY = 4.0; // Intense white glow multiplier
+
+  // Optimization: Reuse arrays
+  private tempPositions = new Float32Array(this.POINTS_COUNT * 3);
+  private tempColors = new Float32Array(this.POINTS_COUNT * 3);
+
   constructor() {
     effect(() => {
       if (this.material) {
-        this.material.size = 8.0; // Increased from 5.0 to 8.0
+        this.material.size = 6.0;
       }
     });
   }
@@ -69,12 +77,11 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initThreeJS();
     this.createPointCloud();
-    this.createSideDecorations();
     this.setupVideo();
     this.setupEventListeners();
     this.setupResizeObserver();
     this.animate();
-    this.onWindowResize(); // Initial resize
+    this.onWindowResize();
 
     if (this.videoSrc) {
       this.loadVideoFromSrc(this.videoSrc);
@@ -88,6 +95,14 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
+
+    // Cleanup Three.js resources
+    this.geometry?.dispose();
+    this.material?.dispose();
+    this.glowLayers.forEach((layer) => {
+      layer.geometry.dispose();
+      (layer.points.material as THREE.Material).dispose();
+    });
     this.renderer?.dispose();
   }
 
@@ -96,13 +111,16 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0a0d14);
 
-    // Initialize camera with even wider FOV for closer view
     this.camera = new THREE.PerspectiveCamera(40, 1, 1, 10000);
     this.camera.position.set(0, 0, 800);
     this.camera.lookAt(0, 0, 0);
 
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      powerPreference: 'high-performance',
+    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   }
 
   private setupResizeObserver(): void {
@@ -117,40 +135,25 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
       }
     });
 
-    // Observe the canvas element
     this.resizeObserver.observe(canvas);
   }
 
   private handleResize(width: number, height: number): void {
-    // Update camera aspect ratio
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-
-    // Update renderer size
     this.renderer.setSize(width, height, false);
 
-    // Calculate optimal camera distance
     const fov = this.camera.fov * (Math.PI / 180);
-    const gridHeight = this.GRID_HEIGHT * 12; // Updated to match new scale
-    const gridWidth = this.GRID_WIDTH * 12; // Updated to match new scale
+    const gridHeight = this.GRID_HEIGHT * 12;
+    const gridWidth = this.GRID_WIDTH * 12;
 
-    // Calculate visible dimensions at camera distance
     const vFov = fov;
     const hFov = 2 * Math.atan(Math.tan(fov / 2) * this.camera.aspect);
 
-    // Calculate distance to fit width or height
     const distanceHeight = gridHeight / 2 / Math.tan(vFov / 2);
     const distanceWidth = gridWidth / 2 / Math.tan(hFov / 2);
 
-    // Use the distance that fits both dimensions with minimal margin
     this.camera.position.z = Math.max(distanceHeight, distanceWidth) * 0.95;
-
-    // Update side decorations position based on aspect ratio
-    if (this.sideElements.length >= 2) {
-      const sideOffset = this.camera.aspect * 1000;
-      this.sideElements[0].position.x = -sideOffset;
-      this.sideElements[1].position.x = sideOffset;
-    }
   }
 
   @HostListener('window:resize')
@@ -172,8 +175,8 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     let index = 0;
     for (let y = 0; y < this.GRID_HEIGHT; y++) {
       for (let x = 0; x < this.GRID_WIDTH; x++) {
-        const posX = (x - this.GRID_WIDTH / 2) * 12; // Reduced from 16 to compensate for wider grid
-        const posY = -(y - this.GRID_HEIGHT / 2) * 12; // Reduced from 16 to maintain proportion
+        const posX = (x - this.GRID_WIDTH / 2) * 12;
+        const posY = -(y - this.GRID_HEIGHT / 2) * 12;
 
         positions[index * 3] = posX;
         positions[index * 3 + 1] = posY;
@@ -183,7 +186,12 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
         originalPositions[index * 3 + 1] = posY;
         originalPositions[index * 3 + 2] = 0;
 
-        colors[index * 3] = colors[index * 3 + 1] = colors[index * 3 + 2] = 1;
+        colors[index * 3] = colors[index * 3 + 1] = colors[index * 3 + 2] = 0.8;
+
+        // Initialize scatter maps
+        this.scatterIntensityMap[index] = 0;
+        this.scatterDecayMap[index] = 0;
+
         index++;
       }
     }
@@ -199,7 +207,7 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     );
 
     this.material = new THREE.PointsMaterial({
-      size: 8.0, // Increased from 5.0 to 8.0
+      size: 6.0,
       vertexColors: true,
       transparent: true,
       opacity: 1.0,
@@ -215,13 +223,14 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   }
 
   private createGlowLayers(): void {
+    // Enhanced glow layers for stronger effect
     for (let layer = 1; layer <= 3; layer++) {
       const glowGeometry = this.geometry.clone();
       const glowMaterial = new THREE.PointsMaterial({
-        size: 8.0 * (1 + layer * 0.5), // Increased base size from 5.0 to 8.0
+        size: 6.0 * (1 + layer * 0.6), // Larger glow sizes
         vertexColors: true,
         transparent: true,
-        opacity: 0.3 / layer,
+        opacity: 0.4 / layer, // Increased opacity
         alphaTest: 0.1,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
@@ -232,145 +241,6 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
       this.scene.add(glowPoints);
       this.glowLayers.push({ points: glowPoints, geometry: glowGeometry });
     }
-  }
-
-  private createSideDecorations(): void {
-    // Create vertical scan lines on both sides
-    const createScanLines = (xPosition: number) => {
-      const group = new THREE.Group();
-
-      // Main vertical lines
-      for (let i = 0; i < 5; i++) {
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array([
-          xPosition + (i - 2) * 30,
-          -1000,
-          0,
-          xPosition + (i - 2) * 30,
-          1000,
-          0,
-        ]);
-        geometry.setAttribute(
-          'position',
-          new THREE.BufferAttribute(positions, 3),
-        );
-
-        const material = new THREE.LineBasicMaterial({
-          color: new THREE.Color(0.3, 0.6, 0.8),
-          transparent: true,
-          opacity: 0.3,
-          linewidth: 1,
-        });
-
-        const line = new THREE.Line(geometry, material);
-        group.add(line);
-      }
-
-      // Floating particles
-      const particleGeometry = new THREE.BufferGeometry();
-      const particleCount = 50;
-      const positions = new Float32Array(particleCount * 3);
-      const opacities = new Float32Array(particleCount);
-
-      for (let i = 0; i < particleCount; i++) {
-        positions[i * 3] = xPosition + (Math.random() - 0.5) * 150;
-        positions[i * 3 + 1] = (Math.random() - 0.5) * 1500;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
-        opacities[i] = Math.random();
-      }
-
-      particleGeometry.setAttribute(
-        'position',
-        new THREE.BufferAttribute(positions, 3),
-      );
-      particleGeometry.setAttribute(
-        'opacity',
-        new THREE.BufferAttribute(opacities, 1),
-      );
-
-      const particleMaterial = new THREE.PointsMaterial({
-        size: 3,
-        color: new THREE.Color(0.5, 0.8, 1.0),
-        transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending,
-        vertexColors: false,
-        sizeAttenuation: true,
-      });
-
-      const particles = new THREE.Points(particleGeometry, particleMaterial);
-      group.add(particles);
-
-      // Add grid pattern
-      const gridGroup = new THREE.Group();
-      const gridSize = 100;
-      const gridDivisions = 10;
-
-      for (let j = -5; j <= 5; j++) {
-        const lineGeometry = new THREE.BufferGeometry();
-        const linePositions = new Float32Array([
-          xPosition - gridSize,
-          (j * gridSize) / 5,
-          -50,
-          xPosition + gridSize,
-          (j * gridSize) / 5,
-          -50,
-        ]);
-        lineGeometry.setAttribute(
-          'position',
-          new THREE.BufferAttribute(linePositions, 3),
-        );
-
-        const lineMaterial = new THREE.LineBasicMaterial({
-          color: new THREE.Color(0.2, 0.4, 0.6),
-          transparent: true,
-          opacity: 0.2,
-        });
-
-        const gridLine = new THREE.Line(lineGeometry, lineMaterial);
-        gridGroup.add(gridLine);
-      }
-
-      group.add(gridGroup);
-      return group;
-    };
-
-    // Create decorations for left and right sides
-    const leftDecoration = createScanLines(-2000);
-    const rightDecoration = createScanLines(2000);
-
-    this.sideElements.push(leftDecoration, rightDecoration);
-    this.scene.add(leftDecoration);
-    this.scene.add(rightDecoration);
-  }
-
-  private animateSideElements(time: number): void {
-    this.sideElements.forEach((group, index) => {
-      // Animate vertical lines
-      group.children.forEach((child, childIndex) => {
-        if (child instanceof THREE.Line && childIndex < 5) {
-          child.material.opacity =
-            0.2 + Math.sin(time * 0.001 + childIndex) * 0.1;
-        }
-
-        // Animate particles
-        if (child instanceof THREE.Points) {
-          child.rotation.y = time * 0.0001;
-          const positions = child.geometry.attributes.position
-            .array as Float32Array;
-          for (let i = 0; i < positions.length; i += 3) {
-            positions[i + 1] += Math.sin(time * 0.001 + i) * 0.5;
-            if (positions[i + 1] > 750) positions[i + 1] = -750;
-          }
-          child.geometry.attributes.position.needsUpdate = true;
-        }
-
-        // Animate grid
-        if (child instanceof THREE.Group) {
-          child.rotation.z = Math.sin(time * 0.0005) * 0.05;
-        }
-      });
-    });
   }
 
   private setupVideo(): void {
@@ -406,17 +276,18 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
           const centerX = this.GRID_WIDTH / 2;
           const centerY = this.GRID_HEIGHT / 2;
           const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-          const wave = Math.sin(distance * 0.1 + time * 0.05) * 0.5 + 0.5;
+          const wave = Math.sin(distance * 0.08 + time * 0.04) * 0.5 + 0.5;
           const noise =
-            Math.sin(x * 0.1 + time * 0.02) * Math.cos(y * 0.1 + time * 0.03);
+            Math.sin(x * 0.05 + time * 0.015) *
+            Math.cos(y * 0.05 + time * 0.02);
           const intensity = Math.max(
             0,
-            Math.min(255, (wave + noise * 0.3) * 255),
+            Math.min(255, (wave + noise * 0.4) * 255),
           );
 
           data[index] = intensity;
-          data[index + 1] = intensity * 0.8;
-          data[index + 2] = intensity * 0.6;
+          data[index + 1] = intensity * 0.85;
+          data[index + 2] = intensity * 0.7;
           data[index + 3] = 255;
         }
       }
@@ -435,10 +306,11 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   private updatePointCloud(): void {
     if (!this.video.videoWidth || !this.video.videoHeight) return;
 
+    // Enhanced glitch system
     this.glitchTime++;
-    if (Math.random() < 0.003) {
-      this.glitchIntensity = Math.random() * 0.7 + 0.3;
-      setTimeout(() => (this.glitchIntensity = 0), Math.random() * 1000 + 500);
+    if (Math.random() < 0.008) {
+      this.glitchIntensity = Math.random() * 1.2 + 0.6;
+      setTimeout(() => (this.glitchIntensity = 0), Math.random() * 500 + 150);
     }
 
     this.ctx2D.drawImage(this.video, 0, 0, this.GRID_WIDTH, this.GRID_HEIGHT);
@@ -458,9 +330,22 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
 
     const rect = this.canvasRef.nativeElement.getBoundingClientRect();
     const mouseWorldX =
-      ((this.mouseX / rect.width) * 2 - 1) * (this.GRID_WIDTH * 6); // Adjusted for new scale
+      ((this.mouseX / rect.width) * 2 - 1) * (this.GRID_WIDTH * 6);
     const mouseWorldY =
-      -((this.mouseY / rect.height) * 2 - 1) * (this.GRID_HEIGHT * 6); // Adjusted for new scale
+      -((this.mouseY / rect.height) * 2 - 1) * (this.GRID_HEIGHT * 6);
+
+    const isGlitching = this.glitchIntensity > 0;
+
+    // Update scatter decay for all points
+    for (let i = 0; i < this.POINTS_COUNT; i++) {
+      if (this.scatterDecayMap[i] > 0) {
+        this.scatterDecayMap[i] *= 0.92; // Slower decay for longer effect
+        if (this.scatterDecayMap[i] < 0.01) {
+          this.scatterDecayMap[i] = 0;
+          this.scatterIntensityMap[i] = 0;
+        }
+      }
+    }
 
     let index = 0;
     for (let y = 0; y < this.GRID_HEIGHT; y++) {
@@ -491,40 +376,99 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
             Math.pow(originalY - mouseWorldY, 2),
         );
 
+        // ENHANCED: Much stronger scatter effect with persistent intensity
         let scatterX = 0,
           scatterY = 0,
           scatterZ = 0;
-        if (this.isMouseOverCanvas && distanceToMouse < 50) {
-          const scatterFactor = 1 - distanceToMouse / 50;
-          const scatterIntensity = scatterFactor * 20;
+        let currentScatterIntensity = this.scatterIntensityMap[index];
+
+        if (
+          this.isMouseOverCanvas &&
+          distanceToMouse < this.MAX_SCATTER_DISTANCE
+        ) {
+          // Calculate scatter factor with explosive falloff
+          const scatterFactor = Math.pow(
+            1 - distanceToMouse / this.MAX_SCATTER_DISTANCE,
+            1.5,
+          );
+          const newScatterIntensity = scatterFactor * this.SCATTER_STRENGTH;
+
+          // Update scatter intensity (with momentum for explosive transitions)
+          if (newScatterIntensity > currentScatterIntensity) {
+            this.scatterIntensityMap[index] = newScatterIntensity;
+            this.scatterDecayMap[index] = 1.0; // Full decay strength
+            currentScatterIntensity = newScatterIntensity;
+          }
+
           const deltaX = originalX - mouseWorldX;
           const deltaY = originalY - mouseWorldY;
           const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
           if (distance > 0) {
-            scatterX = (deltaX / distance) * scatterIntensity;
-            scatterY = (deltaY / distance) * scatterIntensity;
-            scatterZ = scatterIntensity * 0.2;
+            // Explosive scatter with dramatic randomness
+            const randomFactor = 0.6 + Math.random() * 0.8; // Increased randomness
+            const explosionMultiplier = 1.5 + Math.random() * 0.5; // Extra explosion force
+
+            scatterX =
+              (deltaX / distance) *
+              currentScatterIntensity *
+              randomFactor *
+              explosionMultiplier;
+            scatterY =
+              (deltaY / distance) *
+              currentScatterIntensity *
+              randomFactor *
+              explosionMultiplier;
+            scatterZ = currentScatterIntensity * 0.6 * randomFactor;
+
+            // Add chaotic perpendicular scatter for spiral explosion
+            const perpX = -deltaY / distance;
+            const perpY = deltaX / distance;
+            const perpScatter =
+              (Math.random() - 0.5) * currentScatterIntensity * 0.5;
+            scatterX += perpX * perpScatter;
+            scatterY += perpY * perpScatter;
+          }
+        } else if (currentScatterIntensity > 0) {
+          // Apply decaying scatter effect
+          const decayFactor = this.scatterDecayMap[index];
+          const deltaX = originalX - mouseWorldX;
+          const deltaY = originalY - mouseWorldY;
+          const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+          if (distance > 0) {
+            scatterX =
+              (deltaX / distance) * currentScatterIntensity * decayFactor;
+            scatterY =
+              (deltaY / distance) * currentScatterIntensity * decayFactor;
+            scatterZ = currentScatterIntensity * 0.4 * decayFactor;
           }
         }
 
-        // Glitch effect
+        // Enhanced glitch effect
         let glitchX = 0,
-          glitchY = 0;
-        if (
-          this.glitchIntensity > 0 &&
-          Math.random() < this.glitchIntensity * 0.1
-        ) {
-          glitchX = (Math.random() - 0.5) * this.glitchIntensity * 25;
-          glitchY = (Math.random() - 0.5) * this.glitchIntensity * 25;
+          glitchY = 0,
+          glitchZ = 0;
+        if (isGlitching) {
+          glitchX = (Math.random() - 0.5) * this.glitchIntensity * 35;
+          glitchY = (Math.random() - 0.5) * this.glitchIntensity * 35;
+          glitchZ = (Math.random() - 0.5) * this.glitchIntensity * 30;
         }
 
         positions[index * 3] = originalX + scatterX + glitchX;
         positions[index * 3 + 1] = originalY + scatterY + glitchY;
-        positions[index * 3 + 2] = baseZ + scatterZ;
+        positions[index * 3 + 2] = baseZ + scatterZ + glitchZ;
 
-        // Apply holographic colors
-        this.applyHolographicColors(colors, index, brightness, distanceToMouse);
+        // Apply enhanced colors with strong white glow for scattered points
+        this.applyEnhancedHolographicColors(
+          colors,
+          index,
+          brightness,
+          distanceToMouse,
+          currentScatterIntensity,
+          isGlitching,
+        );
+
         index++;
       }
     }
@@ -534,33 +478,68 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     this.updateGlowLayers();
   }
 
-  private applyHolographicColors(
+  private applyEnhancedHolographicColors(
     colors: Float32Array,
     index: number,
     brightness: number,
     distanceToMouse: number,
+    scatterIntensity: number,
+    isGlitching: boolean,
   ): void {
-    let finalColor = [0.5, 0.5, 0.5]; // Default grey
+    let finalColor = [0.5, 0.5, 0.5];
 
-    if (brightness > 220) finalColor = [1.0, 1.0, 1.0];
-    else if (brightness > 180) finalColor = [0.9, 0.9, 0.9];
+    // Base color mapping
+    if (brightness > 220) finalColor = [0.95, 0.95, 0.95];
+    else if (brightness > 180) finalColor = [0.85, 0.85, 0.85];
     else if (brightness > 140) finalColor = [0.7, 0.7, 0.7];
-    else if (brightness > 100) finalColor = [0.5, 0.5, 0.5];
-    else if (brightness > 60) finalColor = [0.3, 0.3, 0.3];
-    else finalColor = [0.1, 0.1, 0.1];
+    else if (brightness > 100) finalColor = [0.55, 0.55, 0.55];
+    else if (brightness > 60) finalColor = [0.4, 0.4, 0.4];
+    else finalColor = [0.25, 0.25, 0.25];
 
-    // Add subtle color variations
-    const variation = (index % 7) / 20;
-    finalColor[0] += variation * 0.1;
-    finalColor[1] += variation * 0.05;
-    finalColor[2] += variation * 0.15;
+    // Subtle color variations
+    const variation = (index % 5) / 25;
+    finalColor[0] += variation * 0.08;
+    finalColor[1] += variation * 0.04;
+    finalColor[2] += variation * 0.12;
 
-    // Mouse glow effect
-    if (this.isMouseOverCanvas && distanceToMouse < 50) {
-      const glowFactor = (1 - distanceToMouse / 50) * 0.6;
-      finalColor[0] = Math.min(1.0, finalColor[0] + glowFactor * 0.7);
-      finalColor[1] = Math.min(1.0, finalColor[1] + glowFactor * 0.8);
-      finalColor[2] = Math.min(1.0, finalColor[2] + glowFactor * 1.0);
+    // DRAMATIC WHITE GLOW for scattered points
+    if (scatterIntensity > 0) {
+      const glowFactor =
+        (scatterIntensity / this.SCATTER_STRENGTH) * this.GLOW_INTENSITY;
+
+      // Progressive white explosion effect
+      if (glowFactor > 2.0) {
+        // Complete white explosion for heavily scattered points
+        finalColor = [1.0, 1.0, 1.0];
+      } else if (glowFactor > 1.0) {
+        // Intense white glow
+        finalColor[0] = Math.min(1.0, finalColor[0] + glowFactor * 0.8);
+        finalColor[1] = Math.min(1.0, finalColor[1] + glowFactor * 0.9);
+        finalColor[2] = Math.min(1.0, finalColor[2] + glowFactor * 1.0);
+      } else {
+        // Moderate white glow with blue tint
+        finalColor[0] = Math.min(1.0, finalColor[0] + glowFactor * 0.6);
+        finalColor[1] = Math.min(1.0, finalColor[1] + glowFactor * 0.8);
+        finalColor[2] = Math.min(1.0, finalColor[2] + glowFactor * 1.0);
+      }
+
+      // Add extra white flash for very scattered points
+      if (scatterIntensity > this.SCATTER_STRENGTH * 0.7) {
+        finalColor[0] = finalColor[1] = finalColor[2] = 1.0;
+      }
+    }
+
+    // Enhanced glitch effect with more white flashing
+    if (isGlitching) {
+      const glitchWhiteness = this.glitchIntensity * 0.8;
+      finalColor[0] = Math.min(1.0, finalColor[0] + glitchWhiteness);
+      finalColor[1] = Math.min(1.0, finalColor[1] + glitchWhiteness);
+      finalColor[2] = Math.min(1.0, finalColor[2] + glitchWhiteness);
+
+      // More frequent pure white flashes during glitch
+      if (Math.random() < 0.25) {
+        finalColor[0] = finalColor[1] = finalColor[2] = 1.0;
+      }
     }
 
     colors[index * 3] = finalColor[0];
@@ -569,27 +548,35 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   }
 
   private updateGlowLayers(): void {
+    const mainPositions = this.geometry.attributes['position']
+      .array as Float32Array;
+    const mainColors = this.geometry.attributes['color'].array as Float32Array;
+
     this.glowLayers.forEach((layer, layerIndex) => {
       const layerPositions = layer.geometry.attributes['position']
         .array as Float32Array;
       const layerColors = layer.geometry.attributes['color']
         .array as Float32Array;
-      const mainPositions = this.geometry.attributes['position']
-        .array as Float32Array;
-      const mainColors = this.geometry.attributes['color']
-        .array as Float32Array;
 
+      // Copy positions with slight offset for depth
       for (let i = 0; i < mainPositions.length; i += 3) {
         layerPositions[i] = mainPositions[i];
         layerPositions[i + 1] = mainPositions[i + 1];
-        layerPositions[i + 2] = mainPositions[i + 2] - (layerIndex + 1) * 2;
+        layerPositions[i + 2] = mainPositions[i + 2] - (layerIndex + 1) * 4; // Increased offset
       }
 
+      // Enhanced glow colors with stronger intensity for white particles
+      const glowIntensity = 0.9 / (layerIndex + 1); // Increased from 0.7
       for (let i = 0; i < mainColors.length; i += 3) {
-        const glowIntensity = 0.8 / (layerIndex + 1);
-        layerColors[i] = mainColors[i] * glowIntensity;
-        layerColors[i + 1] = mainColors[i + 1] * glowIntensity;
-        layerColors[i + 2] = mainColors[i + 2] * glowIntensity;
+        // Amplify white/bright colors dramatically in glow layers
+        const brightnessFactor =
+          (mainColors[i] + mainColors[i + 1] + mainColors[i + 2]) / 3;
+        const isWhite = brightnessFactor > 0.9;
+        const glowBoost = isWhite ? 2.5 : brightnessFactor > 0.8 ? 1.8 : 1.0;
+
+        layerColors[i] = mainColors[i] * glowIntensity * glowBoost;
+        layerColors[i + 1] = mainColors[i + 1] * glowIntensity * glowBoost;
+        layerColors[i + 2] = mainColors[i + 2] * glowIntensity * glowBoost;
       }
 
       layer.geometry.attributes['position'].needsUpdate = true;
@@ -610,19 +597,15 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
       'mouseenter',
       () => (this.isMouseOverCanvas = true),
     );
-    canvas.addEventListener(
-      'mouseleave',
-      () => (this.isMouseOverCanvas = false),
-    );
-
-    // Removed wheel event listener - no more zooming
+    canvas.addEventListener('mouseleave', () => {
+      this.isMouseOverCanvas = false;
+      // Don't reset scatter immediately - let it decay naturally
+    });
   }
 
   private animate(): void {
     this.animationId = requestAnimationFrame(() => this.animate());
-    const time = Date.now();
     this.updatePointCloud();
-    this.animateSideElements(time);
     this.renderer.render(this.scene, this.camera);
   }
 
