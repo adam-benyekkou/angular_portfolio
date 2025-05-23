@@ -17,7 +17,7 @@ export interface NeuralProfileNode {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './neural-profile-tree.component.html',
-  styles: [],
+  styleUrl: './neural-profile-tree.component.css',
 })
 export class NeuralProfileTreeComponent {
   // Input for external data (optional)
@@ -32,8 +32,8 @@ export class NeuralProfileTreeComponent {
   private getInitialData(): NeuralProfileNode[] {
     return [
       {
-        id: 'neuralProfile',
-        title: ':TECH_CORE ',
+        id: 'workstation',
+        title: 'Workstation/',
         isExpanded: true,
         isSelected: false,
         level: 0,

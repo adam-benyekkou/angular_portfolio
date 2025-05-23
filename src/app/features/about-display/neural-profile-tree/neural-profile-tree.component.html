@@ -1,4 +1,4 @@
-<div class="bg-nier-bg border-2 border-nier-border text-nier-dark w-96 font-terminal text-sm leading-relaxed p-4">
+<div class="bg-nier-bg border-2 border-nier-border text-nier-dark w-96 md:w-[28rem] lg:w-[32rem] font-terminal text-sm md:text-base lg:text-lg leading-relaxed p-4 md:p-6">
   @for (node of treeData(); track node.id) {
     <div
       class="border-l-2 border-transparent"
@@ -6,8 +6,10 @@
       [class.hidden]="!node.visible"
     >
       <div
-        class="flex items-center py-1 px-2 cursor-pointer transition-all duration-150 ease-in-out hover:bg-nier-mid/20 hover:translate-x-0.5 relative"
+        class="tree-node-item flex items-center py-1 md:py-2 px-2 md:px-3 cursor-pointer transition-all duration-150 ease-in-out hover:bg-nier-mid/20 hover:translate-x-0.5 relative overflow-hidden"
+        [class.font-bold]="node.isSelected"
         [style.padding-left]="getIndentPadding(node.level)"
+        [attr.data-label]="node.title"
         (click)="selectNode(node)"
       >
         <!-- Selection indicator -->
@@ -17,7 +19,7 @@
 
         <!-- Expand/Collapse Icon -->
         <span
-          class="w-4 h-4 flex items-center justify-center text-nier-accent mr-2 cursor-pointer select-none"
+          class="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 flex items-center justify-center text-nier-accent mr-2 md:mr-3 cursor-pointer select-none text-sm md:text-base lg:text-lg"
           [class.text-nier-mid]="!node.hasChildren"
           (click)="$event.stopPropagation(); toggleExpand(node)"
         >
@@ -34,13 +36,16 @@
           }
         </span>
 
-        <!-- Node Title -->
+        <!-- Node Title with NieR effects -->
         <span
-          class="flex-1 text-nier-dark select-none"
+          class="flex-1 text-nier-dark select-none relative z-10"
           [class.font-bold]="node.isSelected"
         >
           {{ node.title }}
         </span>
+
+        <!-- Scan line effect -->
+        <span class="scan-line"></span>
       </div>
     </div>
   }

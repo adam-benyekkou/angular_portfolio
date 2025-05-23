@@ -1,0 +1,119 @@
+/* NieR-style hover effects for tree nodes */
+.tree-node-item {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+/* Underline effect */
+.tree-node-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-nier-text-dark);
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+
+/* Text color change on hover */
+.tree-node-item:hover {
+  color: var(--color-nier-text-dark);
+  border-bottom-color: var(--color-nier-text-dark);
+}
+
+/* Underline animation on hover */
+.tree-node-item:hover::before {
+  width: 100%;
+}
+
+/* Glitch effect on hover - target the text span directly */
+.tree-node-item:hover span.text-nier-dark {
+  animation: nier-text-glitch 0.6s ease;
+}
+
+/* Alternative - target any span with text */
+.tree-node-item:hover span:last-of-type {
+  animation: nier-text-glitch 0.6s ease;
+}
+
+/* Scan line for tree nodes */
+.tree-node-item .scan-line {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-nier-text-dark);
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.tree-node-item:hover .scan-line {
+  animation: nier-button-scan 0.3s ease forwards;
+}
+
+/* Text glitch animation for tree nodes */
+@keyframes nier-text-glitch {
+  0%, 100% {
+    transform: translateX(0);
+    clip-path: inset(0 0 0 0);
+  }
+  10% {
+    transform: translateX(-2px);
+    clip-path: inset(0 0 40% 0);
+  }
+  15% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(1px);
+    clip-path: inset(40% 0 0 0);
+  }
+  25% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-1px);
+    clip-path: inset(20% 0 20% 0);
+  }
+  35% {
+    transform: translateX(0);
+  }
+}
+
+/* The scan line animation */
+@keyframes nier-button-scan {
+  0% {
+    opacity: 0.5;
+    left: -100%;
+  }
+  100% {
+    opacity: 0;
+    left: 100%;
+  }
+}
+
+/* Active/click state for tree nodes */
+.tree-node-item:active {
+  transform: scale(0.98);
+}
+
+/* Touch device optimization */
+@media (hover: none) {
+  .tree-node-item:active::before {
+    width: 100%;
+  }
+
+  .tree-node-item:active .scan-line {
+    animation: nier-button-scan 0.3s ease forwards;
+  }
+
+  .tree-node-item:active {
+    color: var(--color-nier-text-dark);
+  }
+}
