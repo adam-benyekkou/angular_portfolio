@@ -1,14 +1,35 @@
 import { Routes } from '@angular/router';
-import { AboutComponent } from './layout/components/about/about.component';
-import { ContactComponent } from './layout/components/contact/contact.component';
 import { HeroComponent } from './layout/components/hero/hero.component';
-import { ProjectsListComponent } from './features/project-display/components/projects-list/projects-list.component';
-import { ExperienceComponent } from './layout/components/experience/experience.component';
 
 export const routes: Routes = [
   { path: '', component: HeroComponent },
-  { path: 'about', component: AboutComponent },
-  { path: 'contact', component: ContactComponent },
-  { path: 'projects', component: ProjectsListComponent },
-  { path: 'experience', component: ExperienceComponent },
+  {
+    path: 'about',
+    loadComponent: () =>
+      import('./layout/components/about/about.component').then(
+        (c) => c.AboutComponent,
+      ),
+  },
+  {
+    path: 'contact',
+    loadComponent: () =>
+      import('./layout/components/contact/contact.component').then(
+        (c) => c.ContactComponent,
+      ),
+  },
+  {
+    path: 'projects',
+    loadComponent: () =>
+      import(
+        './features/project-display/components/projects-list/projects-list.component'
+      ).then((c) => c.ProjectsListComponent),
+  },
+  {
+    path: 'experience',
+    loadComponent: () =>
+      import('./layout/components/experience/experience.component').then(
+        (c) => c.ExperienceComponent,
+      ),
+  },
+  { path: '**', redirectTo: '' }, // Wildcard route for 404 handling
 ];

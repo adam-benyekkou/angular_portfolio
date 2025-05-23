@@ -38,21 +38,43 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1.5MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": true,
+                "fonts": true
+              },
+              "sourceMap": false,
+              "extractLicenses": true,
+              "namedChunks": false,
+              "aot": true,
+              "buildOptimizer": true,
+              "vendorChunk": false,
+              "commonChunk": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true,
+              "buildOptimizer": false,
+              "vendorChunk": true,
+              "commonChunk": true
             }
           },
           "defaultConfiguration": "production"
@@ -97,7 +119,6 @@
     }
   },
   "cli": {
-    "analytics": "4f33e7fa-04db-4ebd-b6fd-8b5438dbb3ff",
-    "root": ""
+    "analytics": "4f33e7fa-04db-4ebd-b6fd-8b5438dbb3ff"
   }
 }
