@@ -55,11 +55,6 @@
               },
               "sourceMap": false,
               "extractLicenses": true,
-              "namedChunks": false,
-              "aot": true,
-              "buildOptimizer": true,
-              "vendorChunk": false,
-              "commonChunk": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -70,11 +65,7 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "namedChunks": true,
-              "buildOptimizer": false,
-              "vendorChunk": true,
-              "commonChunk": true
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
