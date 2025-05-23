@@ -612,6 +612,9 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   private async loadVideoFromSrc(src: string): Promise<void> {
     this.video.srcObject = null;
     this.video.src = src;
+    this.video.loop = true; // Ensure loop is set after changing source
+    this.video.muted = true; // Also ensure muted is maintained
+    this.video.autoplay = true; // Ensure autoplay is maintained
     this.video.load();
     await this.video.play();
   }
