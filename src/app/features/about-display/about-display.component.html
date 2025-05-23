@@ -1,3 +1,19 @@
-<section class="border-b-1 h-screen flex items-top justify-top checkered-bg p-6 relative">
+<section class="border-b-1 h-screen checkered-bg p-6 flex flex-col">
   <app-section-title title="NEURAL PROFILE" />
+
+  <div class="flex-1 flex items-start justify-between gap-6 mt-6">
+    <!-- Left side - Neural Profile Tree (always shown) -->
+    <div class="flex-shrink-0">
+      <app-neural-profile-tree />
+    </div>
+
+    <!-- Right side - Video container (hidden on mobile) -->
+    <div class="hidden md:flex flex-1 items-center justify-end">
+      <div class="w-4/5 h-96 lg:h-[28rem] overflow-hidden">
+        <app-holo-video-container
+          containerClasses="w-full h-full"
+          videoSrc="cyber_skull.mp4" />
+      </div>
+    </div>
+  </div>
 </section>

@@ -1,0 +1,47 @@
+<div class="bg-nier-bg border-2 border-nier-border text-nier-dark w-96 font-terminal text-sm leading-relaxed p-4">
+  @for (node of treeData(); track node.id) {
+    <div
+      class="border-l-2 border-transparent"
+      [class.border-nier-accent]="node.level >= 2"
+      [class.hidden]="!node.visible"
+    >
+      <div
+        class="flex items-center py-1 px-2 cursor-pointer transition-all duration-150 ease-in-out hover:bg-nier-mid/20 hover:translate-x-0.5 relative"
+        [style.padding-left]="getIndentPadding(node.level)"
+        (click)="selectNode(node)"
+      >
+        <!-- Selection indicator -->
+        @if (node.isSelected) {
+          <div class="absolute left-0 top-0 bottom-0 w-1 bg-nier-accent"></div>
+        }
+
+        <!-- Expand/Collapse Icon -->
+        <span
+          class="w-4 h-4 flex items-center justify-center text-nier-accent mr-2 cursor-pointer select-none"
+          [class.text-nier-mid]="!node.hasChildren"
+          (click)="$event.stopPropagation(); toggleExpand(node)"
+        >
+          @if (node.hasChildren) {
+            {{ node.isExpanded ? '▼' : '▶' }}
+          } @else {
+            @switch (node.level) {
+              @case (2) { ├ }
+              @case (3) {
+                @if (isLastChild(node)) { └ } @else { ├ }
+              }
+              @default { + }
+            }
+          }
+        </span>
+
+        <!-- Node Title -->
+        <span
+          class="flex-1 text-nier-dark select-none"
+          [class.font-bold]="node.isSelected"
+        >
+          {{ node.title }}
+        </span>
+      </div>
+    </div>
+  }
+</div>
