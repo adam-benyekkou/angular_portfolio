@@ -1,4 +1,4 @@
-<section class="border-b border-nier-border min-h-screen checkered-background neural-checkered-bg p-6 lg:p-8 flex flex-col relative neural-section">
+<section class="border-b border-nier-border min-h-screen checkered-background neural-checkered-bg p-6 lg:p-8 flex flex-col relative neural-section w-full overflow-hidden">
 
     <!-- Scanning line effect -->
     <div class="neural-scan-line"></div>
@@ -11,10 +11,10 @@
     </div>
 
     <!-- Main content grid -->
-    <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 neural-content-grid">
+    <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 neural-content-grid w-full">
 
         <!-- Left panel - Neural Profile Tree -->
-        <div class="lg:col-span-7 xl:col-span-6 neural-left-panel">
+        <div class="w-full neural-left-panel">
             <div class="h-full bg-nier-bg border-2 border-nier-border font-terminal text-nier-dark">
                 <!-- Inner content container with proper padding -->
                 <div class="h-full p-4 lg:p-6 neural-tree-container">
@@ -24,7 +24,7 @@
         </div>
 
         <!-- Right panel - Video and status (responsive) -->
-        <div class="lg:col-span-5 xl:col-span-6 flex flex-col gap-4 lg:gap-6 neural-right-panel">
+        <div class="w-full flex flex-col gap-4 lg:gap-6 neural-right-panel">
 
             <!-- Main video display -->
             <div class="flex-1 bg-nier-dark border-2 border-nier-accent neural-video-panel">
