@@ -1,0 +1,144 @@
+<div class="project-card border-2 border-nier-border bg-nier-bg relative overflow-hidden transition-all duration-300 group"
+     [class.redacted]="project().isRedacted"
+     [class.glitch-enabled]="!project().isRedacted"
+     (click)="onCardClick()"
+     (mouseenter)="onHover()"
+     (mouseleave)="onLeave()">
+
+  <!-- Glitch overlay layers -->
+  <div class="glitch-layer glitch-layer-1"></div>
+  <div class="glitch-layer glitch-layer-2"></div>
+  <div class="glitch-layer glitch-layer-3"></div>
+
+  <!-- Static noise overlay for redacted cards -->
+  @if (project().isRedacted) {
+    <div class="static-overlay"></div>
+  }
+
+  <!-- Regular Project Content -->
+  @if (!project().isRedacted) {
+    <!-- Project Header -->
+    <div class="project-header bg-nier-dark text-nier-light p-4 border-b-2 border-nier-border relative overflow-hidden">
+      <!-- Header glitch line -->
+      <div class="header-glitch-line"></div>
+
+      <div class="project-status font-terminal-retro text-sm mb-2 tracking-wider relative z-10"
+           [class]="statusClass()">
+        {{ project().status }}
+      </div>
+      <div class="project-title font-noto-jp text-xl font-normal tracking-wider relative z-10">
+        {{ project().title }}
+      </div>
+    </div>
+
+    <!-- Project Details -->
+    <div class="project-body p-6 space-y-3 relative">
+      <!-- Body scan line -->
+      <div class="body-scan-line"></div>
+
+      <div class="project-detail glitch-text">
+        <span class="detail-label">CLASSIFICATION:</span>
+        <span class="detail-value">{{ project().classification }}</span>
+      </div>
+      <div class="project-detail glitch-text">
+        <span class="detail-label">OBJECTIVE:</span>
+        <span class="detail-value">{{ project().objective }}</span>
+      </div>
+      <div class="project-detail glitch-text">
+        <span class="detail-label">STATUS:</span>
+        <span class="detail-value">{{ project().statusDescription }}</span>
+      </div>
+
+    @if (project().techStack && project().techStack.length > 0) {
+      <div class="tech-stack pt-4 mt-4 border-t border-nier-border">
+        <div class="detail-label mb-3">TECH_STACK:</div>
+        <div class="tech-grid">
+          @for (tech of project().techStack; track tech; let i = $index) {
+            <span class="tech-item glitch-tech"
+                  [style.animation-delay]="getTechItemDelay(i)">{{ tech }}</span>
+          }
+        </div>
+      </div>
+    }
+    </div>
+
+    <!-- Action Buttons -->
+    @if (project().demoUrl || project().codeUrl) {
+      <div class="access-section relative">
+        <!-- Button area glitch -->
+        <div class="button-glitch-overlay"></div>
+
+        @if (project().demoUrl) {
+          <button class="access-btn glitch-button"
+                  (click)="openLink($event, project().demoUrl!)"
+                  (mouseenter)="triggerButtonGlitch($event)">
+            <span class="button-text">EXECUTE_DEMO</span>
+            <div class="button-glitch-layer"></div>
+          </button>
+        }
+        @if (project().codeUrl) {
+          <button class="access-btn glitch-button"
+                  (click)="openLink($event, project().codeUrl!)"
+                  (mouseenter)="triggerButtonGlitch($event)">
+            <span class="button-text">ACCESS_CODE</span>
+            <div class="button-glitch-layer"></div>
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Enhanced click indicator -->
+    <div class="click-indicator">
+      <span class="glitch-click-text">CLICK_FOR_CASE_STUDY</span>
+    </div>
+  }
+
+  <!-- Redacted Project Content -->
+  @if (project().isRedacted) {
+    <div class="redacted-background">
+      <div class="redacted-content">
+        <!-- Redacted Header -->
+        <div class="bg-nier-dark text-nier-light p-4 border-b-2 border-nier-border">
+          <div class="font-terminal-retro text-sm mb-2 redacted-status">[████████████]</div>
+          <div class="font-noto-jp text-xl redacted-title">████████████.EXE</div>
+        </div>
+
+        <!-- Redacted Details -->
+        <div class="p-6 space-y-3">
+          <div class="project-detail">
+            <span class="detail-label">████████████:</span>
+            <span class="detail-value">████████████████████</span>
+          </div>
+          <div class="project-detail">
+            <span class="detail-label">█████████:</span>
+            <span class="detail-value">████████████████████████████</span>
+          </div>
+          <div class="project-detail">
+            <span class="detail-label">██████:</span>
+            <span class="detail-value">████████████████</span>
+          </div>
+
+          <div class="tech-stack pt-4 mt-4 border-t border-nier-border">
+            <div class="detail-label mb-3">██████████:</div>
+            <div class="tech-grid">
+              @for (item of redactedTechItems(); track $index) {
+                <span class="tech-item redacted-tech">████</span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced redacted overlay -->
+      <div class="redacted-overlay">
+        <div class="text-2xl font-noto-jp tracking-wider glitch-redacted-text">REDACTED</div>
+        <div class="text-sm mt-2 opacity-80">TO_BE_COMING</div>
+        <!-- Redacted warning lines -->
+        <div class="redacted-warning-lines"></div>
+      </div>
+    </div>
+  }
+
+  <!-- Corner accent for all cards -->
+  <div class="corner-accent"></div>
+</div>
