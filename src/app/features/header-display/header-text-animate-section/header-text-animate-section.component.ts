@@ -16,14 +16,7 @@ import {
   transition,
   animate,
 } from '@angular/animations';
-
-interface TextItem {
-  readonly id: number;
-  readonly text: string;
-  readonly displayed: string;
-  readonly isTyping: boolean;
-  readonly isComplete: boolean;
-}
+import { type TextItem } from '../../../shared/models/header.model';
 
 // Constants for better maintainability
 const TYPING_DELAYS = {

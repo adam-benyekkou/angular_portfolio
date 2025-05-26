@@ -8,27 +8,7 @@ import {
   ElementRef,
 } from '@angular/core';
 
-export interface Project {
-  id: string;
-  title: string;
-  status: string;
-  classification: string;
-  objective: string;
-  statusDescription: string;
-  techStack: string[];
-  demoUrl?: string;
-  codeUrl?: string;
-  isRedacted: boolean;
-  caseStudy?: {
-    title: string;
-    sections: CaseStudySection[];
-  };
-}
-
-export interface CaseStudySection {
-  title: string;
-  content: string;
-}
+import { type Project } from '../../../../shared/models/project.model';
 
 @Component({
   selector: 'app-project-card',

@@ -1,11 +1,8 @@
 // project-list.component.ts
 import { Component, signal, computed, effect, OnInit } from '@angular/core';
-import {
-  ProjectCardComponent,
-  Project,
-  CaseStudySection,
-} from '../project-card/project-card.component';
+import { ProjectCardComponent } from '../project-card/project-card.component';
 import { SectionTitleComponent } from '../../../../shared/ui/section-title/section-title.component';
+import { type Project } from '../../../../shared/models/project.model';
 
 @Component({
   selector: 'app-project-list',

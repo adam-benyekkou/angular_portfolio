@@ -1,16 +1,6 @@
 import { Component, input, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface NeuralProfileNode {
-  id: string;
-  title: string;
-  isExpanded: boolean;
-  isSelected: boolean;
-  children?: NeuralProfileNode[];
-  level: number;
-  hasChildren: boolean;
-  visible: boolean;
-}
+import { type NeuralProfileNode } from '../../../shared/models/about.model';
 
 @Component({
   selector: 'app-neural-profile-tree',

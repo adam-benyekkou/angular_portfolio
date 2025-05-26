@@ -64,6 +64,7 @@ export class SectionTitleComponent implements OnInit, OnDestroy {
         const timeoutId = setTimeout(() => {
           revealedLetters[i] = true;
         }, i * letterDelay);
+        // @ts-ignore
         this.timeoutIds.push(timeoutId);
       } else {
         revealedLetters[i] = true; // Spaces are always "revealed"
