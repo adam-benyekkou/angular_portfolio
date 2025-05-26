@@ -23,11 +23,13 @@ export class NeuralProfileTreeComponent {
   // Input for external data (optional)
   externalData = input<NeuralProfileNode[]>([]);
 
-  // Internal tree state
+  // Internal tree state and interaction signals
   private treeState = signal<NeuralProfileNode[]>(this.getInitialData());
+  public hoveredNodeId = signal<string | null>(null);
+  public selectedNodeId = signal<string | null>(null);
 
   // Computed flattened tree for rendering
-  treeData = computed(() => this.flattenTree(this.treeState()));
+  treeData = computed(() => this.flattenTreeWithVisibility(this.treeState()));
 
   private getInitialData(): NeuralProfileNode[] {
     return [
@@ -208,19 +210,29 @@ export class NeuralProfileTreeComponent {
     ];
   }
 
-  private flattenTree(nodes: NeuralProfileNode[]): NeuralProfileNode[] {
+  private flattenTreeWithVisibility(
+    nodes: NeuralProfileNode[],
+  ): NeuralProfileNode[] {
     const result: NeuralProfileNode[] = [];
 
-    const traverse = (nodes: NeuralProfileNode[]) => {
+    const traverse = (
+      nodes: NeuralProfileNode[],
+      parentVisible: boolean = true,
+    ) => {
       for (const node of nodes) {
+        // Node is visible if parent is visible
+        node.visible = parentVisible;
         result.push(node);
-        if (node.isExpanded && node.children) {
-          traverse(node.children);
+
+        // Only traverse children if this node is expanded AND visible
+        if (node.children) {
+          const childrenVisible = parentVisible && node.isExpanded;
+          traverse(node.children, childrenVisible);
         }
       }
     };
 
-    traverse(nodes);
+    traverse(nodes, true); // Root is always visible
     return result;
   }
 
@@ -251,8 +263,80 @@ export class NeuralProfileTreeComponent {
       // Set current node as selected
       this.updateNodeInTree(newState, node.id, { isSelected: true });
 
+      // Update selected node ID for visual representation
+      this.selectedNodeId.set(node.id);
+
       return newState;
     });
+  }
+
+  // NEW METHOD: Handle chip cell hover
+  hoverChipChild(childId: string): void {
+    this.hoveredNodeId.set(childId);
+  }
+  selectToolChild(childId: string): void {
+    // Find the node in the tree and select it
+    this.treeState.update((state) => {
+      const newState = JSON.parse(JSON.stringify(state));
+
+      // Clear all selections first
+      this.clearAllSelections(newState);
+
+      // Find and select the specific child node
+      this.updateNodeInTree(newState, childId, { isSelected: true });
+
+      // Update the signal for visual state
+      this.selectedNodeId.set(childId);
+
+      return newState;
+    });
+  }
+
+  hoverNode(node: NeuralProfileNode): void {
+    this.hoveredNodeId.set(node.id);
+  }
+
+  clearHover(): void {
+    this.hoveredNodeId.set(null);
+  }
+
+  getVisualState(sectionId: string): 'normal' | 'selected' | 'hovered' {
+    const hoveredId = this.hoveredNodeId();
+    const selectedId = this.selectedNodeId();
+
+    // Map node IDs to their corresponding visual sections
+    const nodeToSection: { [key: string]: string } = {
+      workstation: 'workstation',
+      tools: 'tools',
+      webstorm: 'tools',
+      git: 'tools',
+      docker: 'tools',
+      dev: 'dev',
+      front: 'front',
+      angular: 'front',
+      tailwind: 'front',
+      'html-css': 'front',
+      back: 'back',
+      nodejs: 'back',
+      typescript: 'back',
+      php: 'back',
+      python: 'back',
+      data: 'data',
+      postgresql: 'data',
+      mongodb: 'data',
+    };
+
+    // Check if any hovered node belongs to this section
+    if (hoveredId && nodeToSection[hoveredId] === sectionId) {
+      return 'hovered';
+    }
+
+    // Check if any selected node belongs to this section
+    if (selectedId && nodeToSection[selectedId] === sectionId) {
+      return 'selected';
+    }
+
+    return 'normal';
   }
 
   private updateNodeInTree(
