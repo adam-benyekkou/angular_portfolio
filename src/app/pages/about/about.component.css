@@ -1,551 +1,248 @@
-/* ===================== NEURAL PROFILE SECTION ANIMATIONS ===================== */
+/* ===================== NEURAL PROFILE ANIMATIONS ===================== */
 
-/* Section Container Animation */
+/* Core keyframes - reused across components */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===================== NEURAL SECTION ELEMENTS ===================== */
+
+/* Section container - no animation */
 .neural-section {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: neuralSectionMaterialize 1.2s ease-out 0.1s forwards;
+  opacity: 1;
 }
 
-@keyframes neuralSectionMaterialize {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-        filter: blur(2px);
-    }
-    60% {
-        opacity: 0.8;
-        transform: translateY(-5px);
-        filter: blur(0.5px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0px);
-    }
-}
-
-/* Header Section Animation */
+/* Header - no animation */
 .neural-header {
-    opacity: 0;
-    transform: translateY(-20px);
-    animation: neuralHeaderSlideDown 1s ease-out 0.3s forwards;
+  opacity: 1;
 }
 
-@keyframes neuralHeaderSlideDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px);
-        filter: blur(1px);
-    }
-    70% {
-        opacity: 0.9;
-        transform: translateY(3px);
-        filter: blur(0.3px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0px);
-    }
-}
-
-/* Divider Line Animation */
+/* Divider - static */
 .neural-divider {
-    opacity: 0;
-    transform: scaleX(0);
-    transform-origin: left;
-    animation: neuralDividerExpand 0.8s ease-out 0.8s forwards;
+  opacity: 0.5;
 }
 
-@keyframes neuralDividerExpand {
-    0% {
-        opacity: 0;
-        transform: scaleX(0);
-    }
-    50% {
-        opacity: 0.3;
-        transform: scaleX(0.7);
-    }
-    100% {
-        opacity: 0.5;
-        transform: scaleX(1);
-    }
-}
-
-/* Main Content Grid Animation */
+/* Main content grid */
 .neural-content-grid {
-    opacity: 0;
-    transform: translateY(40px);
-    animation: neuralContentReveal 1.2s ease-out 0.5s forwards;
+  opacity: 0;
+  animation: slideInUp 0.8s ease-out 0.3s forwards;
 }
 
-@keyframes neuralContentReveal {
-    0% {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Left Panel - Neural Profile Tree Animation */
+/* Left panel */
 .neural-left-panel {
-    opacity: 0;
-    transform: translateX(-40px) scale(0.95);
-    animation: neuralLeftPanelSlideIn 1.2s ease-out 0.7s forwards;
+  opacity: 0;
+  animation: slideInLeft 0.8s ease-out 0.5s forwards;
 }
 
-@keyframes neuralLeftPanelSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateX(-40px) scale(0.95);
-        border-color: transparent;
-        background-color: rgba(41, 41, 37, 0);
-    }
-    40% {
-        opacity: 0.6;
-        transform: translateX(-10px) scale(0.98);
-        border-color: var(--color-nier-border);
-    }
-    80% {
-        opacity: 0.9;
-        transform: translateX(2px) scale(1.01);
-        background-color: var(--color-nier-bg);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0) scale(1);
-        border-color: var(--color-nier-border);
-        background-color: var(--color-nier-bg);
-    }
-}
-
-/* Neural Profile Tree Content */
+/* Tree content */
 .neural-tree-container {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: neuralTreeContentFadeUp 0.8s ease-out 1.2s forwards;
+  opacity: 0;
+  animation: slideInUp 0.6s ease-out 0.8s forwards;
 }
 
-@keyframes neuralTreeContentFadeUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Right Panel Container Animation */
+/* Right panel */
 .neural-right-panel {
-    opacity: 0;
-    transform: translateX(40px);
-    animation: neuralRightPanelSlideIn 1s ease-out 0.9s forwards;
+  opacity: 0;
+  animation: slideInRight 0.8s ease-out 0.6s forwards;
 }
 
-@keyframes neuralRightPanelSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateX(40px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Video Display Panel Animation */
+/* Video panel */
 .neural-video-panel {
-    opacity: 0;
-    transform: scale(0.95) translateY(20px);
-    animation: neuralVideoPanelMaterialize 1.2s ease-out 1.1s forwards;
+  opacity: 0;
+  animation: scaleIn 0.8s ease-out 0.7s forwards;
 }
 
-@keyframes neuralVideoPanelMaterialize {
-    0% {
-        opacity: 0;
-        transform: scale(0.95) translateY(20px);
-        border-color: transparent;
-        background-color: rgba(41, 41, 37, 0);
-    }
-    30% {
-        opacity: 0.4;
-        transform: scale(0.98) translateY(10px);
-        border-color: var(--color-nier-accent);
-    }
-    70% {
-        opacity: 0.8;
-        transform: scale(1.01) translateY(-2px);
-        background-color: var(--color-nier-dark);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        border-color: var(--color-nier-accent);
-        background-color: var(--color-nier-dark);
-    }
-}
-
-/* Video Container Inner Animation */
+/* Video inner container */
 .neural-video-inner {
-    opacity: 0;
-    transform: scale(0.9);
-    animation: neuralVideoInnerExpand 0.8s ease-out 1.5s forwards;
+  opacity: 0;
+  animation: scaleIn 0.6s ease-out 1.0s forwards;
 }
 
-@keyframes neuralVideoInnerExpand {
-    0% {
-        opacity: 0;
-        transform: scale(0.9);
-        border-color: transparent;
-        background-color: rgba(0, 0, 0, 0);
-    }
-    60% {
-        opacity: 0.7;
-        transform: scale(1.02);
-        border-color: rgba(255, 201, 102, 0.3);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-        border-color: rgba(255, 201, 102, 0.5);
-        background-color: rgba(41, 41, 37, 0.1);
-    }
-}
-
-/* Holo Video Component Animation */
+/* Holo video */
 .neural-holo-video {
-    opacity: 0;
-    animation: neuralHoloVideoFadeIn 1s ease-out 1.8s forwards;
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out 1.2s forwards;
 }
 
-@keyframes neuralHoloVideoFadeIn {
-    0% {
-        opacity: 0;
-        filter: blur(2px) brightness(0.5);
-    }
-    50% {
-        opacity: 0.7;
-        filter: blur(1px) brightness(0.8);
-    }
-    100% {
-        opacity: 1;
-        filter: blur(0px) brightness(1);
-    }
-}
-
-/* Status Panel Animation */
+/* Status panel */
 .neural-status-panel {
-    opacity: 0;
-    transform: translateY(30px) scale(0.95);
-    animation: neuralStatusPanelRise 1s ease-out 1.3s forwards;
+  opacity: 0;
+  animation: slideInUp 0.8s ease-out 0.9s forwards;
 }
 
-@keyframes neuralStatusPanelRise {
-    0% {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-        border-color: transparent;
-        background-color: rgba(41, 41, 37, 0);
-    }
-    40% {
-        opacity: 0.6;
-        transform: translateY(10px) scale(0.98);
-        border-color: var(--color-nier-border);
-    }
-    80% {
-        opacity: 0.9;
-        transform: translateY(-2px) scale(1.01);
-        background-color: var(--color-nier-mid);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        border-color: var(--color-nier-border);
-        background-color: var(--color-nier-mid);
-    }
-}
-
-/* Status Grid Content Animation */
+/* Status grid */
 .neural-status-grid {
-    opacity: 0;
-    transform: translateY(15px);
-    animation: neuralStatusGridFadeUp 0.6s ease-out 1.7s forwards;
+  opacity: 0;
+  animation: slideInUp 0.5s ease-out 1.2s forwards;
 }
 
-@keyframes neuralStatusGridFadeUp {
-    0% {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Status Items Staggered Animation */
+/* Status items */
 .neural-status-item {
-    opacity: 0;
-    transform: translateX(-15px);
-    animation: neuralStatusItemSlideIn 0.5s ease-out forwards;
+  opacity: 0;
+  animation: slideInLeft 0.4s ease-out forwards;
 }
 
-.neural-status-item:nth-child(1) { animation-delay: 1.9s; }
-.neural-status-item:nth-child(2) { animation-delay: 2.1s; }
+.neural-status-item:nth-child(1) { animation-delay: 1.4s; }
+.neural-status-item:nth-child(2) { animation-delay: 1.5s; }
 
-@keyframes neuralStatusItemSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateX(-15px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Status Labels Animation */
+/* Status labels */
 .neural-status-label {
-    opacity: 0;
-    transform: translateY(-5px);
-    animation: neuralStatusLabelFadeDown 0.4s ease-out forwards;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
-.neural-status-item:nth-child(1) .neural-status-label { animation-delay: 2.0s; }
-.neural-status-item:nth-child(2) .neural-status-label { animation-delay: 2.2s; }
+.neural-status-item:nth-child(1) .neural-status-label { animation-delay: 1.5s; }
+.neural-status-item:nth-child(2) .neural-status-label { animation-delay: 1.6s; }
 
-@keyframes neuralStatusLabelFadeDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    100% {
-        opacity: 0.6;
-        transform: translateY(0);
-    }
-}
-
-/* Status Values Animation */
+/* Status values */
 .neural-status-value {
-    opacity: 0;
-    transform: scale(0.9);
-    animation: neuralStatusValuePop 0.4s ease-out forwards;
+  opacity: 0;
+  animation: scaleIn 0.3s ease-out forwards;
 }
 
-.neural-status-item:nth-child(1) .neural-status-value { animation-delay: 2.1s; }
-.neural-status-item:nth-child(2) .neural-status-value { animation-delay: 2.3s; }
+.neural-status-item:nth-child(1) .neural-status-value { animation-delay: 1.6s; }
+.neural-status-item:nth-child(2) .neural-status-value { animation-delay: 1.7s; }
 
-@keyframes neuralStatusValuePop {
-    0% {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    50% {
-        opacity: 0.8;
-        transform: scale(1.05);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Pulse Animation for Status Indicator */
+/* Pulse dot */
 .neural-pulse-dot {
-    opacity: 0;
-    animation: neuralPulseDotAppear 0.6s ease-out forwards;
+  opacity: 0;
+  animation: scaleIn 0.4s ease-out forwards;
 }
 
-.neural-status-item:nth-child(1) .neural-pulse-dot { animation-delay: 2.2s; }
+.neural-status-item:nth-child(1) .neural-pulse-dot { animation-delay: 1.7s; }
 
-@keyframes neuralPulseDotAppear {
-    0% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-    50% {
-        opacity: 0.8;
-        transform: scale(1.2);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
+/* ===================== BACKGROUND ELEMENTS ===================== */
 
-/* Background Checkered Pattern Enhancement */
+/* Checkered background - static */
 .neural-checkered-bg {
-    position: relative;
+  position: relative;
 }
 
 .neural-checkered-bg::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0;
-    background-image:
-            linear-gradient(45deg, rgba(255, 201, 102, 0.01) 25%, transparent 25%),
-            linear-gradient(-45deg, rgba(255, 201, 102, 0.01) 25%, transparent 25%),
-            linear-gradient(45deg, transparent 75%, rgba(255, 201, 102, 0.01) 75%),
-            linear-gradient(-45deg, transparent 75%, rgba(255, 201, 102, 0.01) 75%);
-    background-size: 30px 30px;
-    background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
-    animation: neuralBgPatternFadeIn 3s ease-out 0.2s forwards;
-    pointer-events: none;
-    z-index: 0;
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  background-image:
+    linear-gradient(45deg, rgba(255, 201, 102, 0.01) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 201, 102, 0.01) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 201, 102, 0.01) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 201, 102, 0.01) 75%);
+  background-size: 30px 30px;
+  background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
+  pointer-events: none;
+  z-index: 0;
 }
 
-@keyframes neuralBgPatternFadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-/* Scanning Line Effect for Neural Section */
+/* Scan line - hidden */
 .neural-scan-line {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg,
-    transparent,
-    rgba(255, 201, 102, 0.6),
-    transparent
-    );
-    animation: neuralScanLine 4s ease-in-out 1s forwards;
-    z-index: 1;
-}
-
-@keyframes neuralScanLine {
-    0% {
-        left: -100%;
-        opacity: 0;
-    }
-    20% {
-        opacity: 1;
-    }
-    80% {
-        opacity: 1;
-    }
-    100% {
-        left: 100%;
-        opacity: 0;
-    }
+  display: none;
 }
 
 /* ===================== RESPONSIVE DESIGN ===================== */
 
 @media (max-width: 1024px) {
-    /* Faster animations on tablets */
-    .neural-section {
-        animation-duration: 1s;
-    }
-
-    .neural-left-panel,
-    .neural-video-panel {
-        animation-duration: 1s;
-    }
-
-    .neural-right-panel {
-        animation-duration: 0.8s;
-        animation-delay: 0.7s;
-    }
+  .neural-content-grid,
+  .neural-left-panel,
+  .neural-video-panel,
+  .neural-right-panel {
+    animation-duration: 0.6s;
+  }
 }
 
 @media (max-width: 768px) {
-    /* Much faster animations on mobile */
-    .neural-section {
-        animation-duration: 0.8s;
-        animation-delay: 0.05s;
-    }
+  .neural-content-grid { animation-delay: 0.2s; }
+  .neural-left-panel { animation-delay: 0.3s; }
+  .neural-right-panel { animation-delay: 0.4s; }
+  .neural-video-panel { animation-delay: 0.5s; }
+  .neural-status-panel { animation-delay: 0.6s; }
 
-    .neural-header {
-        animation-duration: 0.6s;
-        animation-delay: 0.2s;
-    }
+  .neural-status-item:nth-child(1) { animation-delay: 0.8s; }
+  .neural-status-item:nth-child(2) { animation-delay: 0.9s; }
 
-    .neural-divider {
-        animation-duration: 0.5s;
-        animation-delay: 0.4s;
-    }
+  .neural-status-item:nth-child(1) .neural-status-label { animation-delay: 0.9s; }
+  .neural-status-item:nth-child(2) .neural-status-label { animation-delay: 1.0s; }
 
-    .neural-content-grid {
-        animation-duration: 0.8s;
-        animation-delay: 0.3s;
-    }
+  .neural-status-item:nth-child(1) .neural-status-value { animation-delay: 1.0s; }
+  .neural-status-item:nth-child(2) .neural-status-value { animation-delay: 1.1s; }
 
-    .neural-left-panel {
-        animation-duration: 0.8s;
-        animation-delay: 0.4s;
-    }
+  .neural-status-item:nth-child(1) .neural-pulse-dot { animation-delay: 1.1s; }
 
-    .neural-right-panel {
-        animation-duration: 0.6s;
-        animation-delay: 0.5s;
-    }
+  /* Faster animations on mobile */
+  .neural-content-grid,
+  .neural-left-panel,
+  .neural-right-panel,
+  .neural-video-panel,
+  .neural-status-panel {
+    animation-duration: 0.5s;
+  }
 
-    .neural-video-panel {
-        animation-duration: 0.8s;
-        animation-delay: 0.6s;
-    }
+  .neural-tree-container,
+  .neural-video-inner,
+  .neural-holo-video,
+  .neural-status-grid {
+    animation-duration: 0.4s;
+  }
 
-    .neural-status-panel {
-        animation-duration: 0.6s;
-        animation-delay: 0.7s;
-    }
-
-    .neural-status-item:nth-child(1) { animation-delay: 0.9s; }
-    .neural-status-item:nth-child(2) { animation-delay: 1.0s; }
-
-    .neural-status-item:nth-child(1) .neural-status-label { animation-delay: 1.0s; }
-    .neural-status-item:nth-child(2) .neural-status-label { animation-delay: 1.1s; }
-
-    .neural-status-item:nth-child(1) .neural-status-value { animation-delay: 1.1s; }
-    .neural-status-item:nth-child(2) .neural-status-value { animation-delay: 1.2s; }
-
-    .neural-status-item:nth-child(1) .neural-pulse-dot { animation-delay: 1.2s; }
+  .neural-status-item,
+  .neural-status-label,
+  .neural-status-value,
+  .neural-pulse-dot {
+    animation-duration: 0.3s;
+  }
 }
 
 /* ===================== ACCESSIBILITY ===================== */
 
-/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
-    .neural-section,
-    .neural-header,
-    .neural-divider,
-    .neural-content-grid,
-    .neural-left-panel,
-    .neural-tree-container,
-    .neural-right-panel,
-    .neural-video-panel,
-    .neural-video-inner,
-    .neural-holo-video,
-    .neural-status-panel,
-    .neural-status-grid,
-    .neural-status-item,
-    .neural-status-label,
-    .neural-status-value,
-    .neural-pulse-dot {
-        animation: none !important;
-        opacity: 1 !important;
-        transform: none !important;
-    }
-
-    .neural-checkered-bg::before,
-    .neural-scan-line {
-        display: none !important;
-    }
+  *[class*="neural-"] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

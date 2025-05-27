@@ -58,13 +58,17 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   // Enhanced scatter properties
   private scatterIntensityMap = new Float32Array(this.POINTS_COUNT);
   private scatterDecayMap = new Float32Array(this.POINTS_COUNT);
-  private readonly MAX_SCATTER_DISTANCE = 600; // Increased scatter range
-  private readonly SCATTER_STRENGTH = 45; // Much stronger scatter
-  private readonly GLOW_INTENSITY = 4.0; // Intense white glow multiplier
+  private readonly MAX_SCATTER_DISTANCE = 600;
+  private readonly SCATTER_STRENGTH = 45;
+  private readonly GLOW_INTENSITY = 4.0;
 
   // Optimization: Reuse arrays
   private tempPositions = new Float32Array(this.POINTS_COUNT * 3);
   private tempColors = new Float32Array(this.POINTS_COUNT * 3);
+
+  // MEMORY LEAK FIX: Add pattern animation cleanup
+  private patternAnimationId: number = 0;
+  private isDestroyed = false;
 
   constructor() {
     effect(() => {
@@ -74,36 +78,86 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.initThreeJS();
     this.createPointCloud();
-    this.setupVideo();
+    await this.setupVideo();
     this.setupEventListeners();
     this.setupResizeObserver();
     this.animate();
     this.onWindowResize();
 
     if (this.videoSrc) {
-      this.loadVideoFromSrc(this.videoSrc);
+      await this.loadVideoFromSrc(this.videoSrc);
     }
   }
 
   ngOnDestroy(): void {
+    // MEMORY LEAK FIX: Comprehensive cleanup
+    this.cleanup();
+  }
+
+  // MEMORY LEAK FIX: Proper cleanup method
+  private cleanup(): void {
+    this.isDestroyed = true;
+
+    // Cancel all animations
     if (this.animationId) {
       cancelAnimationFrame(this.animationId);
+      this.animationId = 0;
     }
+
+    if (this.patternAnimationId) {
+      cancelAnimationFrame(this.patternAnimationId);
+      this.patternAnimationId = 0;
+    }
+
+    // Disconnect resize observer
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
 
+    // Stop and cleanup video
+    if (this.video) {
+      this.video.pause();
+      if (this.video.srcObject) {
+        const stream = this.video.srcObject as MediaStream;
+        stream.getTracks().forEach((track) => track.stop());
+      }
+      this.video.src = '';
+      this.video.srcObject = null;
+      this.video.load();
+    }
+
     // Cleanup Three.js resources
-    this.geometry?.dispose();
-    this.material?.dispose();
+    if (this.geometry) {
+      this.geometry.dispose();
+    }
+    if (this.material) {
+      this.material.dispose();
+    }
+
     this.glowLayers.forEach((layer) => {
-      layer.geometry.dispose();
-      (layer.points.material as THREE.Material).dispose();
+      if (layer.geometry) {
+        layer.geometry.dispose();
+      }
+      if (layer.points.material) {
+        (layer.points.material as THREE.Material).dispose();
+      }
+      if (this.scene) {
+        this.scene.remove(layer.points);
+      }
     });
-    this.renderer?.dispose();
+    this.glowLayers = [];
+
+    if (this.points && this.scene) {
+      this.scene.remove(this.points);
+    }
+
+    if (this.renderer) {
+      this.renderer.dispose();
+      this.renderer.forceContextLoss();
+    }
   }
 
   private initThreeJS(): void {
@@ -243,7 +297,7 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setupVideo(): void {
+  private async setupVideo(): Promise<void> {
     this.video = document.createElement('video');
     this.video.width = this.GRID_WIDTH;
     this.video.height = this.GRID_HEIGHT;
@@ -256,17 +310,24 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
     this.canvas2D.height = this.GRID_HEIGHT;
     this.ctx2D = this.canvas2D.getContext('2d')!;
 
-    this.createAnimatedPattern();
+    await this.createAnimatedPattern();
   }
 
-  private createAnimatedPattern(): void {
+  private async createAnimatedPattern(): Promise<void> {
     const canvas = document.createElement('canvas');
     canvas.width = this.GRID_WIDTH;
     canvas.height = this.GRID_HEIGHT;
     const ctx = canvas.getContext('2d')!;
 
     let time = 0;
+
+    // MEMORY LEAK FIX: Store animation ID and check for component destruction
     const animate = () => {
+      // MEMORY LEAK FIX: Stop animation if component is destroyed
+      if (this.isDestroyed) {
+        return;
+      }
+
       const imageData = ctx.createImageData(this.GRID_WIDTH, this.GRID_HEIGHT);
       const data = imageData.data;
 
@@ -294,13 +355,22 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
 
       ctx.putImageData(imageData, 0, 0);
       time++;
-      requestAnimationFrame(animate);
+
+      // MEMORY LEAK FIX: Store the animation ID for proper cleanup
+      if (!this.isDestroyed) {
+        this.patternAnimationId = requestAnimationFrame(animate);
+      }
     };
 
     animate();
-    const stream = canvas.captureStream(30);
-    this.video.srcObject = stream;
-    this.video.play();
+
+    try {
+      const stream = canvas.captureStream(30);
+      this.video.srcObject = stream;
+      await this.video.play();
+    } catch (error) {
+      console.warn('Pattern video setup failed:', error);
+    }
   }
 
   private updatePointCloud(): void {
@@ -335,6 +405,17 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
       -((this.mouseY / rect.height) * 2 - 1) * (this.GRID_HEIGHT * 6);
 
     const isGlitching = this.glitchIntensity > 0;
+
+    // MEMORY LEAK FIX: Add periodic cleanup of scatter arrays
+    if (this.glitchTime % 300 === 0) {
+      // Every 5 seconds at 60fps
+      for (let i = 0; i < this.POINTS_COUNT; i++) {
+        if (this.scatterDecayMap[i] < 0.01) {
+          this.scatterDecayMap[i] = 0;
+          this.scatterIntensityMap[i] = 0;
+        }
+      }
+    }
 
     // Update scatter decay for all points
     for (let i = 0; i < this.POINTS_COUNT; i++) {
@@ -604,19 +685,32 @@ export class HoloVideoContainerComponent implements OnInit, OnDestroy {
   }
 
   private animate(): void {
+    // MEMORY LEAK FIX: Check if component is destroyed
+    if (this.isDestroyed) return;
+
     this.animationId = requestAnimationFrame(() => this.animate());
     this.updatePointCloud();
     this.renderer.render(this.scene, this.camera);
   }
 
   private async loadVideoFromSrc(src: string): Promise<void> {
-    this.video.srcObject = null;
-    this.video.src = src;
-    this.video.loop = true; // Ensure loop is set after changing source
-    this.video.muted = true; // Also ensure muted is maintained
-    this.video.autoplay = true; // Ensure autoplay is maintained
-    this.video.load();
-    await this.video.play();
+    try {
+      // MEMORY LEAK FIX: Properly stop existing stream before loading new one
+      if (this.video.srcObject) {
+        const stream = this.video.srcObject as MediaStream;
+        stream.getTracks().forEach((track) => track.stop());
+        this.video.srcObject = null;
+      }
+
+      this.video.src = src;
+      this.video.loop = true; // Ensure loop is set after changing source
+      this.video.muted = true; // Also ensure muted is maintained
+      this.video.autoplay = true; // Ensure autoplay is maintained
+      this.video.load();
+      await this.video.play();
+    } catch (error) {
+      console.warn('Video load failed:', error);
+    }
   }
 
   get isLoadingValue(): boolean {

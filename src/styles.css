@@ -1,3 +1,5 @@
+/* ===================== OPTIMIZED GLOBAL THEME ===================== */
+
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Major+Mono+Display&family=Noto+Sans+JP:wght@300;400;500&family=VT323&display=swap');
 
 @layer theme, tailwind-base, tailwind-utilities;
@@ -14,146 +16,108 @@
     --font-terminal-nier: 'Major Mono Display', monospace;
     --font-noto-jp: 'Noto Sans JP', sans-serif;
 
-    /* Authentic NieR Automata UI colors from screenshot */
-    --color-nier-bg: #dcd8c0;         /* Main parchment background */
-    --color-nier-dark: #5a5a50;       /* Dark UI elements */
-    --color-nier-mid: #adaba0;        /* Medium gray UI elements */
-    --color-nier-text-dark: #292925;  /* Dark text */
-    --color-nier-text-light: #dcd8c0; /* Light text */
-    --color-nier-border: #a39e8c;     /* Border color */
-    --color-nier-grid: #bfbcad;       /* Grid lines */
-    --color-nier-accent: #292925;     /* Dark accent */
-    --color-nier-highlight: #5a5a50;  /* Highlight for selection */
+    /* NieR Automata UI colors */
+    --color-nier-bg: #dcd8c0;
+    --color-nier-dark: #5a5a50;
+    --color-nier-mid: #adaba0;
+    --color-nier-text-dark: #292925;
+    --color-nier-text-light: #dcd8c0;
+    --color-nier-border: #a39e8c;
+    --color-nier-grid: #bfbcad;
+    --color-nier-accent: #292925;
+    --color-nier-highlight: #5a5a50;
+    --color-nier-checkered-bg: #d1cdb7;
+    --color-nier-checkered-grid: #ccc8b1;
+  }
 
-    /* Checkered background colors */
-    --color-nier-checkered-bg: #d1cdb7;       /* Slightly darker than main bg */
-    --color-nier-checkered-grid: #ccc8b1;     /* Grid lines for checkered pattern */
+  /* Dark mode variables */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-nier-bg: #292925;
+      --color-nier-dark: #adaba0;
+      --color-nier-mid: #5a5a50;
+      --color-nier-text-dark: #dcd8c0;
+      --color-nier-text-light: #292925;
+      --color-nier-border: #5a5a50;
+      --color-nier-grid: #3f3e39;
+      --color-nier-accent: #dcd8c0;
+      --color-nier-highlight: #adaba0;
+      --color-nier-checkered-bg: #121210;
+      --color-nier-checkered-grid: #323232;
+    }
+  }
+
+  /* Manual theme classes */
+  .dark {
+    --color-nier-bg: #292925;
+    --color-nier-dark: #adaba0;
+    --color-nier-mid: #5a5a50;
+    --color-nier-text-dark: #dcd8c0;
+    --color-nier-text-light: #292925;
+    --color-nier-border: #5a5a50;
+    --color-nier-grid: #3f3e39;
+    --color-nier-accent: #dcd8c0;
+    --color-nier-highlight: #adaba0;
+    --color-nier-checkered-bg: #121210;
+    --color-nier-checkered-grid: #323232;
+  }
+
+  .light {
+    --color-nier-bg: #dcd8c0;
+    --color-nier-dark: #5a5a50;
+    --color-nier-mid: #adaba0;
+    --color-nier-text-dark: #292925;
+    --color-nier-text-light: #dcd8c0;
+    --color-nier-border: #a39e8c;
+    --color-nier-grid: #bfbcad;
+    --color-nier-accent: #292925;
+    --color-nier-highlight: #5a5a50;
+    --color-nier-checkered-bg: #d1cdb7;
+    --color-nier-checkered-grid: #ccc8b1;
   }
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Inverted colors for dark mode */
-    --color-nier-bg: #292925;         /* Inverted from text-dark */
-    --color-nier-dark: #adaba0;       /* Inverted from mid */
-    --color-nier-mid: #5a5a50;        /* Inverted from dark */
-    --color-nier-text-dark: #dcd8c0;  /* Inverted from bg */
-    --color-nier-text-light: #292925; /* Inverted from text-dark */
-    --color-nier-border: #5a5a50;     /* Darkened border */
-    --color-nier-grid: #3f3e39;       /* Darkened grid */
-    --color-nier-accent: #dcd8c0;     /* Inverted from accent */
-    --color-nier-highlight: #adaba0;  /* Inverted from highlight */
-
-    /* Inverted checkered background colors */
-    --color-nier-checkered-bg: #121210;       /* Dark background for checkered pattern */
-    --color-nier-checkered-grid: #323232;     /* Grid lines for dark checkered pattern */
-  }
-}
-
-/* Manual dark mode class for toggle functionality */
-.dark {
-  /* Same inverted colors as media query */
-  --color-nier-bg: #292925;         /* Inverted from text-dark */
-  --color-nier-dark: #adaba0;       /* Inverted from mid */
-  --color-nier-mid: #5a5a50;        /* Inverted from dark */
-  --color-nier-text-dark: #dcd8c0;  /* Inverted from bg */
-  --color-nier-text-light: #292925; /* Inverted from text-dark */
-  --color-nier-border: #5a5a50;     /* Darkened border */
-  --color-nier-grid: #3f3e39;       /* Darkened grid */
-  --color-nier-accent: #dcd8c0;     /* Inverted from accent */
-  --color-nier-highlight: #adaba0;  /* Inverted from highlight */
-
-  /* Inverted checkered background colors */
-  --color-nier-checkered-bg: #121210;       /* Dark background for checkered pattern */
-  --color-nier-checkered-grid: #323232;     /* Grid lines for dark checkered pattern */
-}
-
-/* Light mode class to override system preference */
-.light {
-  /* Original colors */
-  --color-nier-bg: #dcd8c0;         /* Main parchment background */
-  --color-nier-dark: #5a5a50;       /* Dark UI elements */
-  --color-nier-mid: #adaba0;        /* Medium gray UI elements */
-  --color-nier-text-dark: #292925;  /* Dark text */
-  --color-nier-text-light: #dcd8c0; /* Light text */
-  --color-nier-border: #a39e8c;     /* Border color */
-  --color-nier-grid: #bfbcad;       /* Grid lines */
-  --color-nier-accent: #292925;     /* Dark accent */
-  --color-nier-highlight: #5a5a50;  /* Highlight for selection */
-
-  /* Checkered background colors */
-  --color-nier-checkered-bg: #d1cdb7;       /* Slightly darker than main bg */
-  --color-nier-checkered-grid: #ccc8b1;     /* Grid lines for checkered pattern */
-}
-
 
 @layer tailwind-utilities {
   /* Font utilities */
-  .font-terminal {
-    font-family: var(--font-terminal);
-  }
-
-  .font-terminal-retro {
-    font-family: var(--font-terminal-retro);
-  }
-
-  .font-terminal-nier {
-    font-family: var(--font-terminal-nier);
-  }
-
+  .font-terminal { font-family: var(--font-terminal); }
+  .font-terminal-retro { font-family: var(--font-terminal-retro); }
+  .font-terminal-nier { font-family: var(--font-terminal-nier); }
   .font-noto-jp {
     font-family: var(--font-noto-jp);
-    letter-spacing: -0.02em; /* Slight adjustment to mimic NieR style */
+    letter-spacing: -0.02em;
   }
 
   /* Background utilities */
-  .bg-nier-bg {
-    background-color: var(--color-nier-bg);
-  }
-
-  .bg-nier-dark {
-    background-color: var(--color-nier-dark);
-  }
-
-  .bg-nier-mid {
-    background-color: var(--color-nier-mid);
-  }
+  .bg-nier-bg { background-color: var(--color-nier-bg); }
+  .bg-nier-dark { background-color: var(--color-nier-dark); }
+  .bg-nier-mid { background-color: var(--color-nier-mid); }
 
   /* Text utilities */
-  .text-nier-dark {
-    color: var(--color-nier-text-dark);
-  }
-
-  .text-nier-light {
-    color: var(--color-nier-text-light);
-  }
+  .text-nier-dark { color: var(--color-nier-text-dark); }
+  .text-nier-light { color: var(--color-nier-text-light); }
 
   /* Border utilities */
-  .border-nier-border {
-    border-color: var(--color-nier-border);
-  }
+  .border-nier-border { border-color: var(--color-nier-border); }
+  .border-nier-accent { border-color: var(--color-nier-accent); }
 
-  .border-nier-accent {
-    border-color: var(--color-nier-accent);
-  }
-
-  /* Checkered background using theme variables */
+  /* Pattern utilities */
   .checkered-background {
     background-color: var(--color-nier-checkered-bg);
     background-size: 0.3rem 0.3rem;
-    background-image: linear-gradient(to right, var(--color-nier-checkered-grid) 1px, rgba(0, 0, 0, 0) 1px),
-    linear-gradient(to bottom, var(--color-nier-checkered-grid) 1px, rgba(0, 0, 0, 0) 1px);
+    background-image:
+      linear-gradient(to right, var(--color-nier-checkered-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-nier-checkered-grid) 1px, transparent 1px);
     color: var(--color-nier-text-dark);
-    transition: background-color 0.3s ease, background-image 0.3s ease, color 0.3s ease;
+    transition: all 0.3s ease;
   }
 
-  /* Additional utility for grid-based layouts */
   .nier-grid {
     display: grid;
     background-color: var(--color-nier-bg);
     background-size: 2rem 2rem;
-    background-image: linear-gradient(to right, var(--color-nier-grid) 1px, rgba(0, 0, 0, 0) 1px),
-    linear-gradient(to bottom, var(--color-nier-grid) 1px, rgba(0, 0, 0, 0) 1px);
+    background-image:
+      linear-gradient(to right, var(--color-nier-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-nier-grid) 1px, transparent 1px);
     border: 1px solid var(--color-nier-border);
     transition: all 0.3s ease;
   }

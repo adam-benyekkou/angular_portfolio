@@ -1,0 +1,248 @@
+/* ===================== CONTACT PAGE ANIMATIONS ===================== */
+
+/* Core keyframes - reused across components */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scanLine {
+  from { transform: translate3d(-100%, 0, 0); opacity: 0; }
+  50% { opacity: 1; }
+  to { transform: translate3d(100%, 0, 0); opacity: 0; }
+}
+
+/* ===================== CONTACT ELEMENTS ===================== */
+
+/* Content container */
+.contact-content-container {
+  opacity: 0;
+  animation: slideInUp 0.8s ease-out 0.4s forwards;
+}
+
+/* Availability status */
+.availability-status {
+  opacity: 0;
+  animation: slideInLeft 0.6s ease-out 0.6s forwards;
+}
+
+/* Status dot */
+.status-dot {
+  opacity: 0;
+  animation: scaleIn 0.4s ease-out 0.8s forwards;
+}
+
+/* Contact grid */
+.contact-grid {
+  opacity: 0;
+  animation: slideInUp 0.8s ease-out 0.8s forwards;
+}
+
+/* Contact items */
+.contact-item {
+  opacity: 0;
+  animation: scaleIn 0.8s ease-out forwards;
+  position: relative;
+}
+
+.contact-item:nth-child(1) { animation-delay: 1.0s; }
+.contact-item:nth-child(2) { animation-delay: 1.1s; }
+.contact-item:nth-child(3) { animation-delay: 1.2s; }
+
+/* Scan line effect */
+.contact-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--color-nier-accent), transparent);
+  animation: scanLine 1.5s ease-out forwards;
+  z-index: 20;
+}
+
+.contact-item:nth-child(1)::before { animation-delay: 1.2s; }
+.contact-item:nth-child(2)::before { animation-delay: 1.3s; }
+.contact-item:nth-child(3)::before { animation-delay: 1.4s; }
+
+/* Contact icons */
+.contact-icon {
+  opacity: 0;
+  animation: scaleIn 0.5s ease-out forwards;
+}
+
+.contact-item:nth-child(1) .contact-icon { animation-delay: 1.3s; }
+.contact-item:nth-child(2) .contact-icon { animation-delay: 1.4s; }
+.contact-item:nth-child(3) .contact-icon { animation-delay: 1.5s; }
+
+/* Contact labels and values */
+.contact-label,
+.contact-value {
+  opacity: 0;
+  animation: slideInLeft 0.4s ease-out forwards;
+}
+
+.contact-item:nth-child(1) .contact-label { animation-delay: 1.4s; }
+.contact-item:nth-child(2) .contact-label { animation-delay: 1.5s; }
+.contact-item:nth-child(3) .contact-label { animation-delay: 1.6s; }
+
+.contact-item:nth-child(1) .contact-value { animation-delay: 1.5s; }
+.contact-item:nth-child(2) .contact-value { animation-delay: 1.6s; }
+.contact-item:nth-child(3) .contact-value { animation-delay: 1.7s; }
+
+/* Info panels container */
+.info-panels-container {
+  opacity: 0;
+  animation: slideInUp 0.8s ease-out 1.4s forwards;
+}
+
+/* Info panels */
+.info-panel {
+  opacity: 0;
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+.info-panel:nth-child(1) { animation-delay: 1.6s; }
+.info-panel:nth-child(2) { animation-delay: 1.7s; }
+
+/* Info panel titles and content */
+.info-panel-title {
+  opacity: 0;
+  animation: slideInLeft 0.4s ease-out forwards;
+}
+
+.info-panel-content {
+  opacity: 0;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.info-panel:nth-child(1) .info-panel-title { animation-delay: 1.8s; }
+.info-panel:nth-child(2) .info-panel-title { animation-delay: 1.9s; }
+
+.info-panel:nth-child(1) .info-panel-content { animation-delay: 1.9s; }
+.info-panel:nth-child(2) .info-panel-content { animation-delay: 2.0s; }
+
+/* ===================== HOVER EFFECTS ===================== */
+
+.contact-item:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(90, 90, 80, 0.1);
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover .contact-icon {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(90, 90, 80, 0.3);
+  transition: all 0.3s ease;
+}
+
+/* ===================== BACKGROUND PATTERN ===================== */
+
+.contact-content-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  background-image:
+    linear-gradient(45deg, rgba(90, 90, 80, 0.02) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(90, 90, 80, 0.02) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(90, 90, 80, 0.02) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(90, 90, 80, 0.02) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ===================== RESPONSIVE DESIGN ===================== */
+
+@media (max-width: 768px) {
+  .contact-content-container { animation-delay: 0.3s; }
+  .availability-status { animation-delay: 0.4s; }
+  .contact-grid { animation-delay: 0.6s; }
+
+  .contact-item:nth-child(1) { animation-delay: 0.8s; }
+  .contact-item:nth-child(2) { animation-delay: 0.9s; }
+  \contact-item:nth-child(3) { animation-delay: 1.0s; }
+
+  .info-panels-container { animation-delay: 1.2s; }
+  .info-panel:nth-child(1) { animation-delay: 1.3s; }
+  .info-panel:nth-child(2) { animation-delay: 1.4s; }
+
+  /* Faster animations on mobile */
+  .contact-content-container,
+  .availability-status,
+  .contact-grid,
+  .contact-item,
+  .info-panels-container,
+  .info-panel {
+    animation-duration: 0.6s;
+  }
+
+  .status-dot,
+  .contact-icon,
+  .contact-label,
+  .contact-value,
+  .info-panel-title,
+  .info-panel-content {
+    animation-duration: 0.3s;
+  }
+}
+
+/* ===================== ACCESSIBILITY ===================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *[class*="contact-"],
+  *[class*="info-"],
+  .availability-status,
+  .status-dot {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .contact-item::before,
+  .contact-content-container::before {
+    display: none !important;
+  }
+
+  .contact-item:hover {
+    transform: none;
+  }
+}
