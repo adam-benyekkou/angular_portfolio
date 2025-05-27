@@ -8,6 +8,10 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  /* Initial fade-in animation */
+  opacity: 0;
+  animation: fadeInHost 0.8s ease-out 0.1s forwards;
 }
 
 /* CSS Custom Properties for reusability */
@@ -18,6 +22,8 @@
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-hover: 0 8px 25px rgba(41, 41, 37, 0.15);
   --shadow-subtle: 0 4px 12px rgba(41, 41, 37, 0.1);
+  --animation-duration: 0.6s;
+  --animation-delay-base: 0.15s;
 }
 
 /* Main Grid Layout */
@@ -28,7 +34,14 @@
   width: 100%;
   height: 100%;
   max-height: calc(100vh - 8rem);
-  overflow-y: auto;
+
+  /* Hide overflow initially to prevent scrollbar during animation */
+  overflow: hidden;
+  animation: enableScrollAfterAnimation 0s ease-out 5s forwards;
+
+  /* Container fade-in */
+  opacity: 0;
+  animation: fadeInContainer 0.6s ease-out 0.4s forwards, enableScrollAfterAnimation 0s ease-out 5s forwards;
 }
 
 /* Column Base Styles */
@@ -37,8 +50,28 @@
   flex-direction: column;
   gap: var(--card-gap);
   min-height: 0;
-  overflow-y: auto;
   padding-right: 0.5rem;
+
+  /* Hide overflow initially */
+  overflow: hidden;
+  animation: enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
+
+  /* Initial state for animation */
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Staggered column animations */
+.professional-column {
+  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 4) forwards, enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
+}
+
+.education-column {
+  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 6) forwards, enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
+}
+
+.personal-column {
+  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 8) forwards, enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
 }
 
 /* Sticky Column Titles */
@@ -56,6 +89,11 @@
   top: 0;
   background: var(--color-nier-bg);
   z-index: 10;
+
+  /* Title animation */
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: slideInLeft 0.5s ease-out calc(var(--animation-delay-base) * 10) forwards;
 }
 
 /* Base Card Styles */
@@ -68,6 +106,20 @@
   margin-bottom: var(--card-gap);
   flex-shrink: 0;
   border-radius: var(--border-radius);
+
+  /* Card initial state */
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  will-change: transform, opacity;
+}
+
+/* Staggered card animations */
+.experience-card {
+  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 12) forwards;
+}
+
+.info-card {
+  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 14) forwards;
 }
 
 /* Enhanced Card Hover Effects */
@@ -101,6 +153,7 @@
 /* Active Training Highlight */
 .active-training {
   border-color: var(--color-nier-accent);
+  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 12) forwards;
 }
 
 /* Optimized Card Headers */
@@ -212,9 +265,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 30%;
+  width: 0;
   height: 1px;
   background: var(--color-nier-accent);
+  animation: expandLine 0.8s ease-out calc(var(--animation-delay-base) * 16) forwards;
 }
 
 .tech-grid {
@@ -238,7 +292,20 @@
   white-space: nowrap;
   transition: var(--transition-smooth);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  /* Initial state for staggered animation */
+  opacity: 0;
+  transform: scale(0.8) translateY(10px);
+  animation: techItemFadeIn 0.4s ease-out forwards;
 }
+
+/* Staggered animation delays for tech items */
+.tech-item:nth-child(1) { animation-delay: calc(var(--animation-delay-base) * 18); }
+.tech-item:nth-child(2) { animation-delay: calc(var(--animation-delay-base) * 19); }
+.tech-item:nth-child(3) { animation-delay: calc(var(--animation-delay-base) * 20); }
+.tech-item:nth-child(4) { animation-delay: calc(var(--animation-delay-base) * 21); }
+.tech-item:nth-child(5) { animation-delay: calc(var(--animation-delay-base) * 22); }
+.tech-item:nth-child(n+6) { animation-delay: calc(var(--animation-delay-base) * 23); }
 
 .tech-item:hover,
 .trait-item:hover {
@@ -249,6 +316,7 @@
 .trait-item {
   padding: 0.375rem 0.25rem;
   text-align: center;
+  animation-delay: calc(var(--animation-delay-base) * 24);
 }
 
 /* Enhanced Status Badges */
@@ -290,6 +358,11 @@
   padding: 0.25rem;
   border-radius: 2px;
   transition: background-color 0.3s ease, transform 0.3s ease;
+
+  /* Interest item animation */
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: slideInLeft 0.4s ease-out calc(var(--animation-delay-base) * 26) forwards;
 }
 
 .interest-item:hover {
@@ -322,6 +395,10 @@
   margin-bottom: var(--card-gap);
   position: relative;
   padding-left: 1rem;
+
+  /* Philosophy text animation */
+  opacity: 0;
+  animation: fadeIn 0.8s ease-out calc(var(--animation-delay-base) * 28) forwards;
 }
 
 .philosophy-text::before {
@@ -331,18 +408,20 @@
   top: -0.25rem;
   font-size: 1.5rem;
   color: var(--color-nier-accent);
-  opacity: 0.3;
+  opacity: 0;
+  animation: fadeIn 0.6s ease-out calc(var(--animation-delay-base) * 30) forwards;
 }
 
 .philosophy-note {
   font-family: var(--font-terminal);
   font-size: 0.75rem;
   color: var(--color-nier-text-dark);
-  opacity: 0.8;
+  opacity: 0;
   margin-top: var(--card-gap);
   padding-top: var(--card-gap);
   border-top: 1px solid var(--color-nier-border);
   line-height: 1.4;
+  animation: fadeIn 0.6s ease-out calc(var(--animation-delay-base) * 32) forwards;
 }
 
 /* Visual Effects */
@@ -354,12 +433,14 @@
   height: 0;
   border-left: 10px solid transparent;
   border-top: 10px solid var(--color-nier-accent);
-  opacity: 0.7;
+  opacity: 0;
   transition: opacity 0.3s ease;
+  animation: fadeIn 0.4s ease-out calc(var(--animation-delay-base) * 15) forwards;
 }
 
 .experience-card:hover .corner-accent {
   opacity: 1;
+  animation: none;
 }
 
 .scan-line {
@@ -369,17 +450,124 @@
   right: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--color-nier-accent), transparent);
-  animation: scan 4s ease-in-out infinite;
   will-change: transform;
+  opacity: 0;
+  animation: scanFadeIn 0.6s ease-out calc(var(--animation-delay-base) * 17) forwards, scan 4s ease-in-out calc(var(--animation-delay-base) * 20) infinite;
 }
 
 /* Keyframe Animations */
+@keyframes fadeInHost {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInContainer {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes techItemFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes expandLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 30%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scanFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes scan {
   0% {
     transform: translateX(-100%);
   }
   100% {
     transform: translateX(100%);
+  }
+}
+
+/* Enable scrollbars after animations complete */
+@keyframes enableScrollAfterAnimation {
+  to {
+    overflow-y: auto;
+  }
+}
+
+@keyframes enableColumnScrollAfterAnimation {
+  to {
+    overflow-y: auto;
   }
 }
 
@@ -390,6 +578,49 @@
 .trait-item {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  :host,
+  .operative-history-container,
+  .column,
+  .column-title,
+  .experience-card,
+  .info-card,
+  .tech-item,
+  .trait-item,
+  .interest-item,
+  .philosophy-text,
+  .philosophy-text::before,
+  .philosophy-note,
+  .corner-accent,
+  .scan-line,
+  .tech-section::before {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  :host,
+  .operative-history-container,
+  .column,
+  .column-title,
+  .experience-card,
+  .info-card,
+  .tech-item,
+  .trait-item,
+  .interest-item,
+  .philosophy-text,
+  .philosophy-note,
+  .corner-accent {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .operative-history-container,
+  .column {
+    overflow-y: auto !important;
+  }
 }
 
 /* Responsive Design - Optimized */
@@ -510,6 +741,28 @@
   .info-content {
     font-size: 0.85rem;
     line-height: 1.4;
+  }
+
+  /* Faster animations on mobile with earlier scrollbar appearance */
+  :host {
+    --animation-duration: 0.4s;
+    --animation-delay-base: 0.08s;
+  }
+
+  .operative-history-container {
+    animation: fadeInContainer 0.4s ease-out 0.2s forwards, enableScrollAfterAnimation 0s ease-out 2.5s forwards;
+  }
+
+  .professional-column {
+    animation: fadeInUp 0.4s ease-out calc(var(--animation-delay-base) * 4) forwards, enableColumnScrollAfterAnimation 0s ease-out 2.5s forwards;
+  }
+
+  .education-column {
+    animation: fadeInUp 0.4s ease-out calc(var(--animation-delay-base) * 6) forwards, enableColumnScrollAfterAnimation 0s ease-out 2.5s forwards;
+  }
+
+  .personal-column {
+    animation: fadeInUp 0.4s ease-out calc(var(--animation-delay-base) * 8) forwards, enableColumnScrollAfterAnimation 0s ease-out 2.5s forwards;
   }
 }
 
