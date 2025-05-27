@@ -9,9 +9,9 @@
   height: 100%;
   overflow: hidden;
 
-  /* Initial fade-in animation */
+  /* Faster initial fade-in animation */
   opacity: 0;
-  animation: fadeInHost 0.8s ease-out 0.1s forwards;
+  animation: fadeInHost 0.6s ease-out 0.05s forwards;
 }
 
 /* CSS Custom Properties for reusability */
@@ -22,8 +22,8 @@
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-hover: 0 8px 25px rgba(41, 41, 37, 0.15);
   --shadow-subtle: 0 4px 12px rgba(41, 41, 37, 0.1);
-  --animation-duration: 0.6s;
-  --animation-delay-base: 0.15s;
+  --animation-duration: 0.5s;
+  --animation-delay-base: 0.08s;
 }
 
 /* Main Grid Layout */
@@ -37,11 +37,11 @@
 
   /* Hide overflow initially to prevent scrollbar during animation */
   overflow: hidden;
-  animation: enableScrollAfterAnimation 0s ease-out 5s forwards;
+  animation: enableScrollAfterAnimation 0s ease-out 3s forwards;
 
-  /* Container fade-in */
+  /* Faster container fade-in */
   opacity: 0;
-  animation: fadeInContainer 0.6s ease-out 0.4s forwards, enableScrollAfterAnimation 0s ease-out 5s forwards;
+  animation: fadeInContainer 0.5s ease-out 0.15s forwards, enableScrollAfterAnimation 0s ease-out 3s forwards;
 }
 
 /* Column Base Styles */
@@ -54,24 +54,24 @@
 
   /* Hide overflow initially */
   overflow: hidden;
-  animation: enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
+  animation: enableColumnScrollAfterAnimation 0s ease-out 3s forwards;
 
   /* Initial state for animation */
   opacity: 0;
   transform: translateY(20px);
 }
 
-/* Staggered column animations */
+/* Faster staggered column animations */
 .professional-column {
-  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 4) forwards, enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
+  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 3) forwards, enableColumnScrollAfterAnimation 0s ease-out 3s forwards;
 }
 
 .education-column {
-  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 6) forwards, enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
+  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 4) forwards, enableColumnScrollAfterAnimation 0s ease-out 3s forwards;
 }
 
 .personal-column {
-  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 8) forwards, enableColumnScrollAfterAnimation 0s ease-out 5s forwards;
+  animation: fadeInUp var(--animation-duration) ease-out calc(var(--animation-delay-base) * 5) forwards, enableColumnScrollAfterAnimation 0s ease-out 3s forwards;
 }
 
 /* Sticky Column Titles */
@@ -93,7 +93,7 @@
   /* Title animation */
   opacity: 0;
   transform: translateX(-10px);
-  animation: slideInLeft 0.5s ease-out calc(var(--animation-delay-base) * 10) forwards;
+  animation: slideInLeft 0.4s ease-out calc(var(--animation-delay-base) * 7) forwards;
 }
 
 /* Base Card Styles */
@@ -115,11 +115,11 @@
 
 /* Staggered card animations */
 .experience-card {
-  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 12) forwards;
+  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 9) forwards;
 }
 
 .info-card {
-  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 14) forwards;
+  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 10) forwards;
 }
 
 /* Enhanced Card Hover Effects */
@@ -153,7 +153,7 @@
 /* Active Training Highlight */
 .active-training {
   border-color: var(--color-nier-accent);
-  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 12) forwards;
+  animation: cardFadeIn var(--animation-duration) ease-out calc(var(--animation-delay-base) * 9) forwards;
 }
 
 /* Optimized Card Headers */
@@ -268,7 +268,7 @@
   width: 0;
   height: 1px;
   background: var(--color-nier-accent);
-  animation: expandLine 0.8s ease-out calc(var(--animation-delay-base) * 16) forwards;
+  animation: expandLine 0.6s ease-out calc(var(--animation-delay-base) * 12) forwards;
 }
 
 .tech-grid {
@@ -300,12 +300,12 @@
 }
 
 /* Staggered animation delays for tech items */
-.tech-item:nth-child(1) { animation-delay: calc(var(--animation-delay-base) * 18); }
-.tech-item:nth-child(2) { animation-delay: calc(var(--animation-delay-base) * 19); }
-.tech-item:nth-child(3) { animation-delay: calc(var(--animation-delay-base) * 20); }
-.tech-item:nth-child(4) { animation-delay: calc(var(--animation-delay-base) * 21); }
-.tech-item:nth-child(5) { animation-delay: calc(var(--animation-delay-base) * 22); }
-.tech-item:nth-child(n+6) { animation-delay: calc(var(--animation-delay-base) * 23); }
+.tech-item:nth-child(1) { animation-delay: calc(var(--animation-delay-base) * 13); }
+.tech-item:nth-child(2) { animation-delay: calc(var(--animation-delay-base) * 14); }
+.tech-item:nth-child(3) { animation-delay: calc(var(--animation-delay-base) * 15); }
+.tech-item:nth-child(4) { animation-delay: calc(var(--animation-delay-base) * 16); }
+.tech-item:nth-child(5) { animation-delay: calc(var(--animation-delay-base) * 17); }
+.tech-item:nth-child(n+6) { animation-delay: calc(var(--animation-delay-base) * 18); }
 
 .tech-item:hover,
 .trait-item:hover {
@@ -316,7 +316,7 @@
 .trait-item {
   padding: 0.375rem 0.25rem;
   text-align: center;
-  animation-delay: calc(var(--animation-delay-base) * 24);
+  animation-delay: calc(var(--animation-delay-base) * 19);
 }
 
 /* Enhanced Status Badges */
@@ -362,7 +362,7 @@
   /* Interest item animation */
   opacity: 0;
   transform: translateX(-10px);
-  animation: slideInLeft 0.4s ease-out calc(var(--animation-delay-base) * 26) forwards;
+  animation: slideInLeft 0.3s ease-out calc(var(--animation-delay-base) * 20) forwards;
 }
 
 .interest-item:hover {
@@ -398,7 +398,7 @@
 
   /* Philosophy text animation */
   opacity: 0;
-  animation: fadeIn 0.8s ease-out calc(var(--animation-delay-base) * 28) forwards;
+  animation: fadeIn 0.6s ease-out calc(var(--animation-delay-base) * 22) forwards;
 }
 
 .philosophy-text::before {
@@ -409,7 +409,7 @@
   font-size: 1.5rem;
   color: var(--color-nier-accent);
   opacity: 0;
-  animation: fadeIn 0.6s ease-out calc(var(--animation-delay-base) * 30) forwards;
+  animation: fadeIn 0.4s ease-out calc(var(--animation-delay-base) * 23) forwards;
 }
 
 .philosophy-note {
@@ -421,7 +421,7 @@
   padding-top: var(--card-gap);
   border-top: 1px solid var(--color-nier-border);
   line-height: 1.4;
-  animation: fadeIn 0.6s ease-out calc(var(--animation-delay-base) * 32) forwards;
+  animation: fadeIn 0.4s ease-out calc(var(--animation-delay-base) * 24) forwards;
 }
 
 /* Visual Effects */
@@ -435,7 +435,7 @@
   border-top: 10px solid var(--color-nier-accent);
   opacity: 0;
   transition: opacity 0.3s ease;
-  animation: fadeIn 0.4s ease-out calc(var(--animation-delay-base) * 15) forwards;
+  animation: fadeIn 0.3s ease-out calc(var(--animation-delay-base) * 11) forwards;
 }
 
 .experience-card:hover .corner-accent {
@@ -452,7 +452,7 @@
   background: linear-gradient(90deg, transparent, var(--color-nier-accent), transparent);
   will-change: transform;
   opacity: 0;
-  animation: scanFadeIn 0.6s ease-out calc(var(--animation-delay-base) * 17) forwards, scan 4s ease-in-out calc(var(--animation-delay-base) * 20) infinite;
+  animation: scanFadeIn 0.4s ease-out calc(var(--animation-delay-base) * 12) forwards, scan 4s ease-in-out calc(var(--animation-delay-base) * 15) infinite;
 }
 
 /* Keyframe Animations */
@@ -745,24 +745,24 @@
 
   /* Faster animations on mobile with earlier scrollbar appearance */
   :host {
-    --animation-duration: 0.4s;
-    --animation-delay-base: 0.08s;
+    --animation-duration: 0.3s;
+    --animation-delay-base: 0.05s;
   }
 
   .operative-history-container {
-    animation: fadeInContainer 0.4s ease-out 0.2s forwards, enableScrollAfterAnimation 0s ease-out 2.5s forwards;
+    animation: fadeInContainer 0.3s ease-out 0.1s forwards, enableScrollAfterAnimation 0s ease-out 1.5s forwards;
   }
 
   .professional-column {
-    animation: fadeInUp 0.4s ease-out calc(var(--animation-delay-base) * 4) forwards, enableColumnScrollAfterAnimation 0s ease-out 2.5s forwards;
+    animation: fadeInUp 0.3s ease-out calc(var(--animation-delay-base) * 3) forwards, enableColumnScrollAfterAnimation 0s ease-out 1.5s forwards;
   }
 
   .education-column {
-    animation: fadeInUp 0.4s ease-out calc(var(--animation-delay-base) * 6) forwards, enableColumnScrollAfterAnimation 0s ease-out 2.5s forwards;
+    animation: fadeInUp 0.3s ease-out calc(var(--animation-delay-base) * 4) forwards, enableColumnScrollAfterAnimation 0s ease-out 1.5s forwards;
   }
 
   .personal-column {
-    animation: fadeInUp 0.4s ease-out calc(var(--animation-delay-base) * 8) forwards, enableColumnScrollAfterAnimation 0s ease-out 2.5s forwards;
+    animation: fadeInUp 0.3s ease-out calc(var(--animation-delay-base) * 5) forwards, enableColumnScrollAfterAnimation 0s ease-out 1.5s forwards;
   }
 }
 
