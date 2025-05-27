@@ -38,20 +38,30 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1.5MB",
-                  "maximumError": "2MB"
+                  "maximumWarning": "500kB",
+                  "maximumError": "750kB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kB",
-                  "maximumError": "10kB"
+                  "maximumWarning": "15kB",
+                  "maximumError": "25kB"
+                },
+                {
+                  "type": "bundle",
+                  "maximumWarning": "1MB",
+                  "maximumError": "1.5MB"
                 }
               ],
               "outputHashing": "all",
               "optimization": {
                 "scripts": true,
-                "styles": true,
-                "fonts": true
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": {
+                  "inline": true
+                }
               },
               "sourceMap": false,
               "extractLicenses": true
