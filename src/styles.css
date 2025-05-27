@@ -121,4 +121,172 @@
     border: 1px solid var(--color-nier-border);
     transition: all 0.3s ease;
   }
+
+  /* ===================== NIER CUSTOM SCROLLBAR ===================== */
+
+  /* Global scrollbar for all elements */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-nier-accent) var(--color-nier-border);
+  }
+
+  /* WebKit browsers (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-nier-bg);
+    border: 1px solid var(--color-nier-border);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--color-nier-accent) 0%, var(--color-nier-highlight) 100%);
+    border: 1px solid var(--color-nier-border);
+    border-radius: 1px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--color-nier-highlight) 0%, var(--color-nier-accent) 100%);
+    transform: scale(1.1);
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--color-nier-dark);
+    transform: scale(0.95);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--color-nier-bg);
+    border: 1px solid var(--color-nier-border);
+  }
+
+  /* Body scrollbar (main page scroll) */
+  body::-webkit-scrollbar {
+    width: 14px;
+  }
+
+  body::-webkit-scrollbar-track {
+    background: var(--color-nier-checkered-bg);
+    background-size: 8px 8px;
+    background-image:
+      linear-gradient(to right, var(--color-nier-checkered-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-nier-checkered-grid) 1px, transparent 1px);
+    border: 2px solid var(--color-nier-border);
+  }
+
+  /* Code blocks and pre elements */
+  pre::-webkit-scrollbar,
+  code::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  pre::-webkit-scrollbar-track,
+  code::-webkit-scrollbar-track {
+    background: var(--color-nier-dark);
+    border: 1px solid var(--color-nier-accent);
+  }
+
+  pre::-webkit-scrollbar-thumb,
+  code::-webkit-scrollbar-thumb {
+    background: var(--color-nier-accent);
+    border: none;
+  }
+
+  /* Tables */
+  table::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Modal and overlay scrollbars */
+  .modal::-webkit-scrollbar,
+  .overlay::-webkit-scrollbar,
+  .dialog::-webkit-scrollbar,
+  [role="dialog"]::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .modal::-webkit-scrollbar-track,
+  .overlay::-webkit-scrollbar-track,
+  .dialog::-webkit-scrollbar-track,
+  [role="dialog"]::-webkit-scrollbar-track {
+    background: var(--color-nier-mid);
+    border: 1px solid var(--color-nier-border);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    body::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+    }
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-nier-text-dark);
+      border: 2px solid var(--color-nier-accent);
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--color-nier-bg);
+      border: 2px solid var(--color-nier-border);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    ::-webkit-scrollbar-thumb {
+      transition: none;
+      transform: none;
+    }
+
+    ::-webkit-scrollbar-thumb:hover,
+    ::-webkit-scrollbar-thumb:active {
+      transform: none;
+    }
+  }
+
+  /* Special scrollbar for checkered backgrounds */
+  .checkered-bg::-webkit-scrollbar-track,
+  .checkered-background::-webkit-scrollbar-track {
+    background: var(--color-nier-checkered-bg);
+    background-size: 6px 6px;
+    background-image:
+      linear-gradient(to right, var(--color-nier-checkered-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-nier-checkered-grid) 1px, transparent 1px);
+  }
+
+  /* NieR UI specific scrollbars */
+  .nier-panel::-webkit-scrollbar,
+  .nier-menu::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .nier-panel::-webkit-scrollbar-track,
+  .nier-menu::-webkit-scrollbar-track {
+    background: var(--color-nier-bg);
+    border: 2px inset var(--color-nier-border);
+  }
+
+  .nier-panel::-webkit-scrollbar-thumb,
+  .nier-menu::-webkit-scrollbar-thumb {
+    background: var(--color-nier-accent);
+    border: 1px outset var(--color-nier-highlight);
+    border-radius: 0;
+  }
 }

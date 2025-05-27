@@ -1,0 +1,143 @@
+<div class="operative-history-container">
+  <!-- Professional Experience Column -->
+  <div class="column professional-column">
+    <h2 class="column-title">[PROFESSIONAL_ARCHIVE]</h2>
+
+    <div class="experience-list">
+      @for (experience of experiences(); track experience.id) {
+        <article class="experience-card">
+          <div class="corner-accent"></div>
+          @if (experience.status === 'current') {
+            <div class="scan-line"></div>
+          }
+
+          <header class="experience-header">
+            <div
+              class="status-badge"
+              [class.current-status]="experience.status === 'current'"
+              [class.completed-status]="experience.status === 'completed'">
+              {{ experience.statusLabel }}
+            </div>
+            <h3 class="experience-title">
+              {{ experience.title }}
+            </h3>
+          </header>
+
+          <div class="experience-body">
+            <div class="detail-block">
+              <span class="detail-label">CLASSIFICATION:</span>
+              <span class="detail-value">{{ experience.classification }}</span>
+            </div>
+
+            <div class="detail-block">
+              <span class="detail-label">TIMELINE:</span>
+              <span class="detail-value">{{ experience.timeline }}</span>
+            </div>
+
+            <div class="tech-section">
+              <div class="detail-label">TECH_STACK:</div>
+              <div class="tech-grid">
+                @for (tech of experience.techStack; track tech) {
+                  <span class="tech-item">{{ tech }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+
+  <!-- Education Column -->
+  <div class="column education-column">
+    <h2 class="column-title">[EDUCATION_PROTOCOL]</h2>
+
+    @if (currentTraining(); as training) {
+      <article class="experience-card active-training">
+        <div class="corner-accent"></div>
+        <div class="scan-line"></div>
+
+        <header class="experience-header">
+          <div class="current-status">{{ training.statusLabel }}</div>
+          <h3 class="experience-title">{{ training.title }}</h3>
+        </header>
+
+        <div class="experience-body">
+          <div class="detail-block">
+            <span class="detail-label">PROGRAM:</span>
+            <span class="detail-value">{{ training.classification }}</span>
+          </div>
+
+          <div class="detail-block">
+            <span class="detail-label">INSTITUTION:</span>
+            <span class="detail-value">{{ training.timeline }}</span>
+          </div>
+
+          <div class="tech-section">
+            <div class="detail-label">CURRICULUM:</div>
+            <div class="tech-grid">
+              @for (tech of training.techStack; track tech) {
+                <span class="tech-item">{{ tech }}</span>
+              }
+            </div>
+          </div>
+        </div>
+      </article>
+    }
+
+    <!-- Additional Education Info -->
+    <div class="info-card">
+      <div class="info-header">ACADEMIC_FOCUS</div>
+      <div class="info-content">
+        <p>Full-stack development specialization with emphasis on modern web technologies and enterprise-grade solutions.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Info Column -->
+  <div class="column personal-column">
+    <h2 class="column-title">[PERSONAL_DATA]</h2>
+
+    <div class="info-card">
+      <div class="info-header">INTERESTS</div>
+      <div class="info-content">
+        <div class="interest-item">
+          <span class="interest-label">GENRE:</span>
+          <span class="interest-value">Science Fiction</span>
+        </div>
+        <div class="interest-item">
+          <span class="interest-label">STUDY:</span>
+          <span class="interest-value">Philosophy</span>
+        </div>
+        <div class="interest-item">
+          <span class="interest-label">PETS:</span>
+          <span class="interest-value">6 Guinea Pigs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-header">CORE_TRAITS</div>
+      <div class="info-content">
+        <div class="trait-grid">
+          <span class="trait-item">CURIOUS</span>
+          <span class="trait-item">PERSISTENT</span>
+          <span class="trait-item">ANALYTICAL</span>
+          <span class="trait-item">CREATIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card philosophy-card">
+      <div class="info-header">PHILOSOPHY</div>
+      <div class="info-content">
+        <p class="philosophy-text">
+          "The most elegant code emerges from understanding both the technical substrate and the consciousness it serves."
+        </p>
+        <div class="philosophy-note">
+          {{ personalNote() }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
