@@ -1,97 +1,56 @@
 <!-- Contact content with proper container structure -->
 <div class="max-w-6xl mx-auto contact-content-container">
   <!-- Availability Status -->
-  <div class="inline-flex items-center gap-2 bg-nier-dark text-nier-light px-5 py-3 border border-nier-border mb-12 font-terminal text-xs uppercase tracking-wide availability-status mx-6">
-    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse status-dot"></div>
+  <div
+    class="inline-flex items-center gap-2 bg-nier-dark text-nier-light px-5 py-3 border border-nier-border mb-12 font-terminal text-xs uppercase tracking-wide availability-status mx-6"
+  >
+    <div
+      class="w-2 h-2 bg-green-500 rounded-full animate-pulse status-dot"
+    ></div>
     AVAILABLE FOR OPPORTUNITIES
   </div>
 
   <!-- Contact Grid -->
-  <div class="grid grid-cols-1 gap-6 w-full max-w-md mx-auto md:max-w-none contact-grid px-6">
-    <!-- Primary Communication Channel -->
-    <a
-      href="mailto:adam.benyekkou.pro@hotmail.com"
-      class="bg-nier-bg border border-nier-border p-8 flex items-center gap-6 text-nier-dark no-underline transition-all duration-200 hover:bg-nier-highlight hover:text-nier-light hover:border-nier-accent group contact-item relative"
-    >
-      <div class="w-14 h-14 bg-nier-mid border border-nier-border flex items-center justify-center text-xl text-nier-dark flex-shrink-0 transition-all duration-200 group-hover:bg-nier-light group-hover:text-nier-dark contact-icon">
-        <i class="fas fa-envelope"></i>
-      </div>
-      <div class="flex-1">
-        <div class="font-terminal font-medium text-base text-nier-dark uppercase tracking-wide mb-2 group-hover:text-nier-light contact-label">
-          PRIMARY COMMUNICATION CHANNEL
-        </div>
-        <div class="font-noto-jp text-base text-nier-mid leading-relaxed group-hover:text-nier-light contact-value">
-          Email Access Granted<br>
-          Secure encrypted transmission protocol enabled
-        </div>
-      </div>
-    </a>
-
-    <!-- Professional Network Access -->
-    <a
-      href="https://linkedin.com/in/adambnk"
-      target="_blank"
-      class="bg-nier-bg border border-nier-border p-8 flex items-center gap-6 text-nier-dark no-underline transition-all duration-200 hover:bg-nier-highlight hover:text-nier-light hover:border-nier-accent group contact-item relative"
-    >
-      <div class="w-14 h-14 bg-nier-mid border border-nier-border flex items-center justify-center text-xl text-nier-dark flex-shrink-0 transition-all duration-200 group-hover:bg-nier-light group-hover:text-nier-dark contact-icon">
-        <i class="fab fa-linkedin-in"></i>
-      </div>
-      <div class="flex-1">
-        <div class="font-terminal font-medium text-base text-nier-dark uppercase tracking-wide mb-2 group-hover:text-nier-light contact-label">
-          PROFESSIONAL NETWORK ACCESS
-        </div>
-        <div class="font-noto-jp text-base text-nier-mid leading-relaxed group-hover:text-nier-light contact-value">
-          LinkedIn professional interface<br>
-          Connect for career opportunities and networking
-        </div>
-      </div>
-    </a>
-
-    <!-- Source Code Repository -->
-    <a
-      href="https://github.com/adam-benyekkou"
-      target="_blank"
-      class="bg-nier-bg border border-nier-border p-8 flex items-center gap-6 text-nier-dark no-underline transition-all duration-200 hover:bg-nier-highlight hover:text-nier-light hover:border-nier-accent group contact-item relative"
-    >
-      <div class="w-14 h-14 bg-nier-mid border border-nier-border flex items-center justify-center text-xl text-nier-dark flex-shrink-0 transition-all duration-200 group-hover:bg-nier-light group-hover:text-nier-dark contact-icon">
-        <i class="fab fa-github"></i>
-      </div>
-      <div class="flex-1">
-        <div class="font-terminal font-medium text-base text-nier-dark uppercase tracking-wide mb-2 group-hover:text-nier-light contact-label">
-          SOURCE CODE REPOSITORY
-        </div>
-        <div class="font-noto-jp text-base text-nier-mid leading-relaxed group-hover:text-nier-light contact-value">
-          GitHub development archives<br>
-          Access project source files and contribution history
-        </div>
-      </div>
-    </a>
+  <div
+    class="grid grid-cols-1 gap-6 w-full max-w-md mx-auto md:max-w-none contact-grid px-6"
+  >
+    <app-link-card
+      title="EMAIL COMMUNICATION CHANNEL"
+      contact_link="mailto:adam.benyekkou.pro@hotmail.com"
+      description="Secure encrypted transmission protocol"
+    />
+    <app-link-card
+      title="PROFESSIONAL NETWORK ACCESS"
+      contact_link="https://linkedin.com/in/adambnk"
+      description="LinkedIn professional interface<br>
+          Connect for career opportunities and networking"
+    />
+    <app-link-card
+      title="SOURCE CODE REPOSITORY"
+      contact_link="https://github.com/adam-benyekkou"
+      description="GitHub development archives<br />
+          Access project source files and contribution history"
+    />
   </div>
 
   <!-- Info Panels -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 w-full info-panels-container px-6">
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 w-full info-panels-container px-6"
+  >
     <!-- Response Protocol -->
-    <div class="bg-nier-mid border border-nier-border p-6 info-panel">
-      <div class="font-terminal text-base font-medium text-nier-dark mb-3 uppercase tracking-wide info-panel-title">
-        RESPONSE PROTOCOL
-      </div>
-      <div class="font-noto-jp text-base text-nier-dark leading-relaxed info-panel-content">
-        Standard response time: 24-48 hour cycle<br>
-        Emergency contact: Email protocol recommended<br>
-        Priority inquiries: LinkedIn messaging for urgent requests
-      </div>
-    </div>
+    <app-info-panel
+      title="RESPONSE PROTOCOL"
+      description="Standard response time: 24-48 hour cycle<br />
+        Emergency contact: Email protocol recommended<br />
+        Priority inquiries: LinkedIn messaging for urgent requests"
+    />
 
-    <!-- Collaboration Status -->
-    <div class="bg-nier-mid border border-nier-border p-6 info-panel mb-8">
-      <div class="font-terminal text-base font-medium text-nier-dark mb-3 uppercase tracking-wide info-panel-title">
-        COLLABORATION STATUS
-      </div>
-      <div class="font-noto-jp text-base text-nier-dark leading-relaxed info-panel-content">
-        Currently seeking: Full-time opportunities, internships, freelance projects<br>
-        Specialization: Web development, Angular, modern tech stack<br>
-        Location: Remote-ready, French hideout base of operations
-      </div>
-    </div>
+    <app-info-panel
+      class="mb-8"
+      title="COLLABORATION STATUS"
+      description="Currently seeking: Full-time opportunities, internships<br />
+        Specialization: Web development, Angular, PHP, Python<br />
+        Location: Remote-ready, Toulouse, France"
+    />
   </div>
 </div>
