@@ -1,4 +1,4 @@
-<!-- project-list.component.html -->
+<!-- projects.component.html -->
 <section class="min-h-screen bg-nier-bg checkered-background">
   <!-- Section title with animation -->
   <div class="pt-8 pl-8 pb-8 bg-nier-bg checkered-background section-title-container">
@@ -6,81 +6,22 @@
   </div>
 
   <div class="max-w-6xl mx-auto p-6">
-    <!-- Terminal Header with animation -->
-    <div class="checkered-background border-2 border-nier-border p-8 mb-8 font-terminal-nier relative overflow-hidden terminal-header">
-      <!-- Enhanced scan line animation -->
-      <div class="absolute top-0 left-0 w-full h-full opacity-10 enhanced-scan"></div>
 
-      <!-- Terminal text lines with staggered animation -->
-      <div class="text-base mb-2 font-terminal terminal-line">>> ACCESSING PROJECT DATABASE...</div>
-
-      <!-- Progress bar with animation -->
-      <div class="my-6 progress-container">
-        <div class="w-full h-6 border-2 border-nier-accent bg-nier-bg relative overflow-hidden">
-          <div class="h-full bg-nier-dark transition-all duration-[3000ms] ease-out"
-               [class.w-full]="isLoading()"
-               [class.w-0]="!isLoading()"></div>
-        </div>
-      </div>
-
-      <div class="text-base mb-2 font-terminal terminal-line">>> CONNECTION ESTABLISHED</div>
-      <div class="text-base mb-2 font-terminal terminal-line">>> DISPLAYING ARCHIVED MISSIONS</div>
-    </div>
+    <app-project-loader-decorator [isLoading]="isLoading()"/>
 
     <!-- Directory Tree with animation -->
-    <div class="bg-nier-dark text-nier-light border-2 border-nier-accent p-6 mb-8 font-terminal text-sm directory-tree">
-      <div class="font-noto-jp text-xl mb-4 border-b border-nier-mid pb-2 directory-header">SYSTEM DIRECTORY</div>
-      <div class="space-y-1">
-        @for (line of directoryLines(); track $index) {
-          <div class="opacity-0 animate-fade-in-line"
-               [style.animation-delay]="($index * 300) + 'ms'">
-            {{ line }}
-          </div>
-        }
-      </div>
-    </div>
+    <app-project-tree />
 
-    <!-- Projects Grid with animation -->
-    <div class="grid-project-cards mb-8 projects-grid">
-      @for (project of projects(); track project.id) {
-        <app-project-card
-          [project]="project"
-          (caseStudyOpen)="openCaseStudy($event)" />
-      }
-    </div>
+    <!-- Projects List -->
+    <app-project-list
+      [projects]="projects()"
+      (caseStudyOpen)="openCaseStudy($event)" />
 
-    <!-- Footer with animation -->
-    <div class="text-center p-6 border-t-2 border-nier-border font-terminal-retro text-sm text-nier-mid directory-footer">
-      >>> END_OF_DIRECTORY_LISTING<br>
-      >>> TOTAL_PROJECTS: {{ totalProjects() }} | ACTIVE: {{ activeProjects() }} | REDACTED: {{ redactedProjects() }}
-    </div>
+    <app-project-footer [projects]="projects()" />
   </div>
 
-  <!-- Case Study Modal with enhanced animations -->
-  @if (selectedProject()) {
-    <div class="fixed inset-0 z-50 overflow-y-auto p-4 flex items-start justify-center transition-all duration-300 modal-overlay"
-         style="background-color: rgba(41, 41, 37, 0.9);"
-         (click)="closeCaseStudy($event)">
+  <app-project-modal
+    [project]="selectedProject()"
+    (closeModal)="closeCaseStudy()"/>
 
-      <div class="bg-nier-bg border-4 border-nier-accent max-w-4xl w-full max-h-[90vh] overflow-y-auto relative mt-8 modal-container">
-
-        <!-- Modal Header -->
-        <div class="bg-nier-dark text-nier-light p-6 border-b-2 border-nier-border sticky top-0 z-10 modal-header">
-          <div class="font-noto-jp text-3xl mb-2">{{ selectedProject()?.caseStudy?.title }}</div>
-          <button class="absolute top-4 right-6 bg-transparent border-2 border-nier-light text-nier-light w-10 h-10 cursor-pointer font-terminal text-xl hover:bg-nier-light hover:text-nier-dark transition-colors duration-300 modal-close-btn"
-                  (click)="closeCaseStudy()">×</button>
-        </div>
-
-        <!-- Modal Content -->
-        <div class="p-8 modal-content">
-          @for (section of selectedProject()?.caseStudy?.sections; track section.title) {
-            <div class="mb-8 pb-6 border-b border-nier-border last:border-b-0 modal-section">
-              <div class="font-noto-jp text-xl mb-4 text-nier-accent">{{ section.title }}</div>
-              <div class="leading-relaxed mb-4" [innerHTML]="section.content"></div>
-            </div>
-          }
-        </div>
-      </div>
-    </div>
-  }
 </section>

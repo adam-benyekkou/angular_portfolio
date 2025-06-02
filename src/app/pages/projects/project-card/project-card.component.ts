@@ -12,7 +12,6 @@ import { type Project } from '../../../shared/models/project.model';
 
 @Component({
   selector: 'app-project-card',
-  standalone: true,
   templateUrl: './project-card.component.html',
   styleUrl: './project-card.component.css',
 })
@@ -59,8 +58,15 @@ export class ProjectCardComponent implements OnInit {
   }
 
   onCardClick(): void {
+    console.log('Card clicked for project:', this.project().title); // Add this line
+    console.log('Is redacted:', this.project().isRedacted); // Add this line
+    console.log('Has case study:', !!this.project().caseStudy); // Add this line
+
     if (!this.project().isRedacted && this.project().caseStudy) {
+      console.log('Emitting caseStudyOpen event'); // Add this line
       this.caseStudyOpen.emit(this.project());
+    } else {
+      console.log('Not emitting - conditions not met'); // Add this line
     }
   }
 

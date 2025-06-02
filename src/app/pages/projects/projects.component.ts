@@ -1,13 +1,23 @@
-// project-list.component.ts
-import { Component, signal, computed, effect, OnInit } from '@angular/core';
-import { ProjectCardComponent } from './project-card/project-card.component';
+// projects.component.ts
+import { Component, signal, OnInit } from '@angular/core';
 import { SectionTitleComponent } from '../../components/section-title/section-title.component';
 import { type Project } from '../../shared/models/project.model';
+import { ProjectTreeComponent } from './project-tree/project-tree.component';
+import { ProjectModalComponent } from './project-modal/project-modal.component';
+import { ProjectFooterComponent } from './project-footer/project-footer.component';
+import { ProjectLoaderDecoratorComponent } from './project-loader-decorator/project-loader-decorator.component';
+import { ProjectListComponent } from './projects-list/projects-list.component';
 
 @Component({
   selector: 'app-projects',
-  standalone: true,
-  imports: [ProjectCardComponent, SectionTitleComponent],
+  imports: [
+    SectionTitleComponent,
+    ProjectTreeComponent,
+    ProjectModalComponent,
+    ProjectFooterComponent,
+    ProjectLoaderDecoratorComponent,
+    ProjectListComponent,
+  ],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css',
 })
@@ -16,33 +26,6 @@ export class ProjectsComponent implements OnInit {
   projects = signal<Project[]>([]);
   selectedProject = signal<Project | null>(null);
   isLoading = signal(false);
-
-  directoryLines = signal([
-    'EXECUTE//DIRECTORY/',
-    '├── WEB_APPLICATIONS/',
-    '│   ├── portfolio_system.exe',
-    '│   └── [CLASSIFIED].exe',
-    '└── EXPERIMENTAL_PROJECTS/',
-  ]);
-
-  // Computed signals
-  totalProjects = computed(() => this.projects().length);
-  activeProjects = computed(
-    () =>
-      this.projects().filter(
-        (p) => !p.isRedacted && p.status === '[MISSION_ACTIVE]',
-      ).length,
-  );
-  redactedProjects = computed(
-    () => this.projects().filter((p) => p.isRedacted).length,
-  );
-
-  // Effect to handle body scroll when modal opens/closes
-  constructor() {
-    effect(() => {
-      document.body.style.overflow = this.selectedProject() ? 'hidden' : 'auto';
-    });
-  }
 
   ngOnInit(): void {
     this.loadProjects();
@@ -160,10 +143,7 @@ export class ProjectsComponent implements OnInit {
     this.selectedProject.set(project);
   }
 
-  closeCaseStudy(event?: MouseEvent): void {
-    if (event && event.target !== event.currentTarget) {
-      return;
-    }
+  closeCaseStudy(): void {
     this.selectedProject.set(null);
   }
 }

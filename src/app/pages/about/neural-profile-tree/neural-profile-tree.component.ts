@@ -51,6 +51,15 @@ export class NeuralProfileTreeComponent {
                 visible: true,
               },
               {
+                id: 'linux',
+                title: 'Linux_Debian/',
+                isExpanded: false,
+                isSelected: false,
+                level: 2,
+                hasChildren: false,
+                visible: true,
+              },
+              {
                 id: 'git',
                 title: 'Git/',
                 isExpanded: false,
@@ -99,7 +108,7 @@ export class NeuralProfileTreeComponent {
                   },
                   {
                     id: 'tailwind',
-                    title: 'Tailwind/',
+                    title: 'Tailwind_SASS/',
                     isExpanded: false,
                     isSelected: false,
                     level: 3,
@@ -146,7 +155,7 @@ export class NeuralProfileTreeComponent {
                   },
                   {
                     id: 'php',
-                    title: 'PHP/',
+                    title: 'PHP_Symfony/',
                     isExpanded: false,
                     isSelected: false,
                     level: 3,
@@ -155,7 +164,7 @@ export class NeuralProfileTreeComponent {
                   },
                   {
                     id: 'python',
-                    title: 'Python/',
+                    title: 'Python_Django/',
                     isExpanded: false,
                     isSelected: false,
                     level: 3,
@@ -302,6 +311,7 @@ export class NeuralProfileTreeComponent {
       webstorm: 'tools',
       git: 'tools',
       docker: 'tools',
+      linux: 'tools',
       dev: 'dev',
       front: 'front',
       angular: 'front',

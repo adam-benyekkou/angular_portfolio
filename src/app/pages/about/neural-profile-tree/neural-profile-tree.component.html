@@ -71,7 +71,7 @@
     <div class="chip-container" [ngClass]="'chip-' + getVisualState('tools')">
       <div class="chip-parent tools-parent">
         <div class="chip-cells-column">
-          @for (tool of ['webstorm', 'git', 'docker']; track tool) {
+          @for (tool of ['webstorm', 'linux', 'git', 'docker']; track tool) {
             <div
               class="chip-cell"
               [class.cell-hovered]="hoveredNodeId() === tool"

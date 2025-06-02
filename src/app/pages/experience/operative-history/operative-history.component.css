@@ -380,6 +380,7 @@
   width: 60px;
   flex-shrink: 0;
   opacity: 0.8;
+  margin-right: 1rem;
 }
 
 .interest-value {
