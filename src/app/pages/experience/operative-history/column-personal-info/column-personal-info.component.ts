@@ -1,13 +1,17 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { InfoCardComponent } from '../shared/info-card/info-card.component';
+import { TraitItemComponent } from './trait-item/trait-item.component';
+import { DataService } from '../../../../shared/services/data.service';
 
 @Component({
   selector: 'app-column-personal-info',
-  imports: [InfoCardComponent],
+  imports: [InfoCardComponent, TraitItemComponent],
   templateUrl: './column-personal-info.component.html',
   styleUrl: './column-personal-info.component.css',
 })
 export class ColumnPersonalInfoComponent {
+  readonly dataService = inject(DataService);
+
   private readonly _personalNote = signal<string>(
     'In the spaces between keystrokes and compiler runs, I contemplate the philosophical implications of our digital convergence. When not debugging the matrix, I tend to six small organic beings who remind me that even in our increasingly automated world, care and attention to living creatures remains profoundly important.',
   );
@@ -20,4 +24,7 @@ export class ColumnPersonalInfoComponent {
 
   readonly personalNote = this._personalNote.asReadonly();
   readonly philosophyText = this._philosophyText.asReadonly();
+
+  // Use traits from DataService
+  traits = this.dataService.traits;
 }

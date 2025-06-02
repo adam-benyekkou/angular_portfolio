@@ -38,39 +38,11 @@
   animation: slideInLeft 0.4s ease-out calc(var(--animation-delay-base) * 7) forwards;
 }
 
-
-
 /* Personal Info Grid */
 .trait-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.25rem;
-}
-
-.trait-item {
-  background: linear-gradient(135deg, var(--color-nier-accent) 0%, var(--color-nier-highlight) 100%);
-  color: var(--color-nier-text-light);
-  padding: 0.375rem 0.25rem;
-  font-size: 0.7rem;
-  font-family: var(--font-terminal);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-radius: 3px;
-  white-space: nowrap;
-  transition: var(--transition-smooth);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  text-align: center;
-
-  /* Initial state for staggered animation */
-  opacity: 0;
-  transform: scale(0.8) translateY(10px);
-  animation: techItemFadeIn 0.4s ease-out forwards;
-  animation-delay: calc(var(--animation-delay-base) * 19);
-}
-
-.trait-item:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
 .interest-item {
@@ -187,17 +159,6 @@
   }
 }
 
-@keyframes techItemFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -250,18 +211,6 @@
   .trait-grid {
     grid-template-columns: 1fr;
     gap: 0.375rem;
-  }
-
-  .trait-item {
-    padding: 0.5rem 0.375rem;
-    font-size: 0.75rem;
-
-    /* Simplified trait animation */
-    animation-name: techItemFadeIn;
-    animation-duration: 0.2s;
-    animation-timing-function: ease-out;
-    animation-delay: 0.7s;
-    animation-fill-mode: forwards;
   }
 
   .interest-item {
@@ -323,7 +272,6 @@
 
   /* Remove complex animations on very small screens */
   @media (max-width: 360px) {
-    .trait-item,
     .interest-item,
     .philosophy-text,
     .philosophy-text::before,
@@ -346,7 +294,6 @@
   .personal-column,
   .column-title,
   .info-card,
-  .trait-item,
   .interest-item,
   .philosophy-text,
   .philosophy-text::before,

@@ -1,8 +1,8 @@
-import { Component, signal } from '@angular/core';
-import { type Experience } from '../../../../shared/models/experience.model';
+import { Component, inject, computed } from '@angular/core';
 import { DetailBlockComponent } from '../shared/detail-block/detail-block.component';
 import { InfoCardComponent } from '../shared/info-card/info-card.component';
 import { TechStackComponent } from '../tech-stack/tech-stack.component';
+import { DataService } from '../../../../shared/services/data.service';
 
 @Component({
   selector: 'app-column-education-info',
@@ -11,23 +11,22 @@ import { TechStackComponent } from '../tech-stack/tech-stack.component';
   styleUrl: './column-education-info.component.css',
 })
 export class ColumnEducationInfoComponent {
-  private _currentTraining = signal<Experience>({
-    id: 'developer-training',
-    title: 'DEVELOPER_TRAINING.EXE',
-    classification: "Concepteur Développeur d'Applications (RNCP Level BAC+4)",
-    objective:
-      'Intensive full-stack development program focusing on modern web technologies including TypeScript, Node.js, and contemporary development frameworks. Building comprehensive skills in both frontend and backend development.',
-    timeline: "École O'clock | January 2025 - October 2025",
-    techStack: [
-      'TYPESCRIPT',
-      'NODE.JS',
-      'FULL_STACK',
-      'WEB_FRAMEWORKS',
-    ] as const,
-    status: 'current',
-    statusLabel: 'ACTIVE | IN_PROGRESS',
-    isCurrent: true,
-  } as const);
+  readonly dataService = inject(DataService);
 
-  currentTraining = this._currentTraining.asReadonly();
+  // Find the current training (status: 'current' or isCurrent: true)
+  currentTraining = computed(() => {
+    const educations = this.dataService.educations();
+    console.log('Educations:', educations);
+
+    if (educations.length === 0) {
+      console.log('No educations loaded yet');
+      return null;
+    }
+
+    const current = educations.find(
+      (edu) => edu.status === 'current' || edu.isCurrent,
+    );
+    console.log('Current training:', current);
+    return current || null;
+  });
 }
