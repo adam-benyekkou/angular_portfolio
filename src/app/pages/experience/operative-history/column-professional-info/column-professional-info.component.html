@@ -1,1 +1,47 @@
-<p>column-professional-info works!</p>
+<div class="column professional-column">
+  <h2 class="column-title">[PROFESSIONAL_ARCHIVE]</h2>
+
+  <div class="experience-list">
+    @for (experience of experiences(); track experience.id) {
+      <article class="experience-card">
+        <div class="corner-accent"></div>
+        @if (experience.status === 'current') {
+          <div class="scan-line"></div>
+        }
+
+        <header class="experience-header">
+          <div
+            class="status-badge"
+            [class.current-status]="experience.status === 'current'"
+            [class.completed-status]="experience.status === 'completed'">
+            {{ experience.statusLabel }}
+          </div>
+          <h3 class="experience-title">
+            {{ experience.title }}
+          </h3>
+        </header>
+
+        <div class="experience-body">
+          <div class="detail-block">
+            <span class="detail-label">CLASSIFICATION:</span>
+            <span class="detail-value">{{ experience.classification }}</span>
+          </div>
+
+          <div class="detail-block">
+            <span class="detail-label">TIMELINE:</span>
+            <span class="detail-value">{{ experience.timeline }}</span>
+          </div>
+
+          <div class="tech-section">
+            <div class="detail-label">TECH_STACK:</div>
+            <div class="tech-grid">
+              @for (tech of experience.techStack; track tech) {
+                <span class="tech-item">{{ tech }}</span>
+              }
+            </div>
+          </div>
+        </div>
+      </article>
+    }
+  </div>
+</div>

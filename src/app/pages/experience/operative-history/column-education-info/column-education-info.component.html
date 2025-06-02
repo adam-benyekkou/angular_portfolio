@@ -1,0 +1,45 @@
+<!-- Education Column -->
+<div class="column education-column">
+  <h2 class="column-title">[EDUCATION_PROTOCOL]</h2>
+
+  @if (currentTraining(); as training) {
+    <article class="experience-card active-training">
+      <div class="corner-accent"></div>
+      <div class="scan-line"></div>
+
+      <header class="experience-header">
+        <div class="current-status">{{ training.statusLabel }}</div>
+        <h3 class="experience-title">{{ training.title }}</h3>
+      </header>
+
+      <div class="experience-body">
+        <div class="detail-block">
+          <span class="detail-label">PROGRAM:</span>
+          <span class="detail-value">{{ training.classification }}</span>
+        </div>
+
+        <div class="detail-block">
+          <span class="detail-label">INSTITUTION:</span>
+          <span class="detail-value">{{ training.timeline }}</span>
+        </div>
+
+        <div class="tech-section">
+          <div class="detail-label">CURRICULUM:</div>
+          <div class="tech-grid">
+            @for (tech of training.techStack; track tech) {
+              <span class="tech-item">{{ tech }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    </article>
+  }
+
+  <!-- Additional Education Info -->
+  <div class="info-card">
+    <div class="info-header">ACADEMIC_FOCUS</div>
+    <div class="info-content">
+      <p>Full-stack development specialization with emphasis on modern web technologies and enterprise-grade solutions.</p>
+    </div>
+  </div>
+</div>
