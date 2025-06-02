@@ -24,15 +24,7 @@
         <div class="experience-body">
           <app-detail-block label="CLASSIFICATION:" [value]="experience.classification"/>
           <app-detail-block label="TIMELINE:" [value]="experience.timeline"/>
-
-          <div class="tech-section">
-            <div class="detail-label">TECH_STACK:</div>
-            <div class="tech-grid">
-              @for (tech of experience.techStack; track tech) {
-                <span class="tech-item">{{ tech }}</span>
-              }
-            </div>
-          </div>
+          <app-tech-stack label="TECH_STACK:" [techStack]="experience.techStack"/>
         </div>
       </article>
     }

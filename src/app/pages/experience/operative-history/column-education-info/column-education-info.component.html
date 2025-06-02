@@ -15,15 +15,7 @@
       <div class="experience-body">
         <app-detail-block label="PROGRAM:" [value]="training.classification" />
         <app-detail-block label="INSTITUTION:" [value]="training.timeline" />
-
-        <div class="tech-section">
-          <div class="detail-label">CURRICULUM:</div>
-          <div class="tech-grid">
-            @for (tech of training.techStack; track tech) {
-              <span class="tech-item">{{ tech }}</span>
-            }
-          </div>
-        </div>
+        <app-tech-stack label="CURRICULUM:" [techStack]="training.techStack"/>
       </div>
     </article>
   }

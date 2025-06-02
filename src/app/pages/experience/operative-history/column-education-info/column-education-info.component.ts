@@ -2,15 +2,16 @@ import { Component, signal } from '@angular/core';
 import { type Experience } from '../../../../shared/models/experience.model';
 import { DetailBlockComponent } from '../shared/detail-block/detail-block.component';
 import { InfoCardComponent } from '../shared/info-card/info-card.component';
+import { TechStackComponent } from '../tech-stack/tech-stack.component';
 
 @Component({
   selector: 'app-column-education-info',
-  imports: [DetailBlockComponent, InfoCardComponent],
+  imports: [DetailBlockComponent, InfoCardComponent, TechStackComponent],
   templateUrl: './column-education-info.component.html',
   styleUrl: './column-education-info.component.css',
 })
 export class ColumnEducationInfoComponent {
-  private readonly _currentTraining = signal<Experience>({
+  private _currentTraining = signal<Experience>({
     id: 'developer-training',
     title: 'DEVELOPER_TRAINING.EXE',
     classification: "Concepteur Développeur d'Applications (RNCP Level BAC+4)",
@@ -28,5 +29,5 @@ export class ColumnEducationInfoComponent {
     isCurrent: true,
   } as const);
 
-  readonly currentTraining = this._currentTraining.asReadonly();
+  currentTraining = this._currentTraining.asReadonly();
 }
