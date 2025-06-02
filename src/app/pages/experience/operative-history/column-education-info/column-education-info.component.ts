@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { type Experience } from '../../../../shared/models/experience.model';
 import { DetailBlockComponent } from '../shared/detail-block/detail-block.component';
+import { InfoCardComponent } from '../shared/info-card/info-card.component';
 
 @Component({
   selector: 'app-column-education-info',
-  imports: [DetailBlockComponent],
+  imports: [DetailBlockComponent, InfoCardComponent],
   templateUrl: './column-education-info.component.html',
   styleUrl: './column-education-info.component.css',
 })

@@ -13,8 +13,8 @@
       </header>
 
       <div class="experience-body">
-        <app-detail-block label="PROGRAM:" [value]="training.classification"/>
-        <app-detail-block label="INSTITUTION:" [value]="training.timeline"/>
+        <app-detail-block label="PROGRAM:" [value]="training.classification" />
+        <app-detail-block label="INSTITUTION:" [value]="training.timeline" />
 
         <div class="tech-section">
           <div class="detail-label">CURRICULUM:</div>
@@ -29,10 +29,10 @@
   }
 
   <!-- Additional Education Info -->
-  <div class="info-card">
-    <div class="info-header">ACADEMIC_FOCUS</div>
-    <div class="info-content">
-      <p>Full-stack development specialization with emphasis on modern web technologies and enterprise-grade solutions.</p>
-    </div>
-  </div>
+  <app-info-card headerTitle="ACADEMIC_FOCUS">
+    <p>
+      Full-stack development specialization with emphasis on modern web
+      technologies and enterprise-grade solutions.
+    </p>
+  </app-info-card>
 </div>

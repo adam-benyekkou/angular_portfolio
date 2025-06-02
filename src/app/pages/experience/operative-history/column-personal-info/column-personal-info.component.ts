@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core';
+import { InfoCardComponent } from '../shared/info-card/info-card.component';
 
 @Component({
   selector: 'app-column-personal-info',
-  imports: [],
+  imports: [InfoCardComponent],
   templateUrl: './column-personal-info.component.html',
   styleUrl: './column-personal-info.component.css',
 })
