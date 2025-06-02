@@ -1,6 +1,14 @@
-import { Component, input, signal, computed } from '@angular/core';
+import {
+  Component,
+  input,
+  signal,
+  computed,
+  inject,
+  effect,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { type NeuralProfileNode } from '../../../shared/models/about.model';
+import { DataService } from '../../../shared/services/data.service';
 
 @Component({
   selector: 'app-neural-profile-tree',
@@ -10,203 +18,51 @@ import { type NeuralProfileNode } from '../../../shared/models/about.model';
   styleUrl: './neural-profile-tree.component.css',
 })
 export class NeuralProfileTreeComponent {
-  // Input for external data (optional)
+  private readonly dataService = inject(DataService);
+
+  // Input for external data (optional override)
   externalData = input<NeuralProfileNode[]>([]);
 
   // Internal tree state and interaction signals
-  private treeState = signal<NeuralProfileNode[]>(this.getInitialData());
+  private treeState = signal<NeuralProfileNode[]>([]);
   public hoveredNodeId = signal<string | null>(null);
   public selectedNodeId = signal<string | null>(null);
 
   // Computed flattened tree for rendering
   treeData = computed(() => this.flattenTreeWithVisibility(this.treeState()));
 
-  private getInitialData(): NeuralProfileNode[] {
-    return [
-      {
-        id: 'workstation',
-        title: 'Workstation/',
-        isExpanded: true,
-        isSelected: false,
-        level: 0,
-        hasChildren: true,
-        visible: true,
-        children: [
-          {
-            id: 'tools',
-            title: 'Tools/',
-            isExpanded: true,
-            isSelected: false,
-            level: 1,
-            hasChildren: true,
-            visible: true,
-            children: [
-              {
-                id: 'webstorm',
-                title: 'Webstorm/',
-                isExpanded: false,
-                isSelected: false,
-                level: 2,
-                hasChildren: false,
-                visible: true,
-              },
-              {
-                id: 'linux',
-                title: 'Linux_Debian/',
-                isExpanded: false,
-                isSelected: false,
-                level: 2,
-                hasChildren: false,
-                visible: true,
-              },
-              {
-                id: 'git',
-                title: 'Git/',
-                isExpanded: false,
-                isSelected: false,
-                level: 2,
-                hasChildren: false,
-                visible: true,
-              },
-              {
-                id: 'docker',
-                title: 'Docker/',
-                isExpanded: false,
-                isSelected: false,
-                level: 2,
-                hasChildren: false,
-                visible: true,
-              },
-            ],
-          },
-          {
-            id: 'dev',
-            title: 'Dev/',
-            isExpanded: true,
-            isSelected: false,
-            level: 1,
-            hasChildren: true,
-            visible: true,
-            children: [
-              {
-                id: 'front',
-                title: 'Front/',
-                isExpanded: true,
-                isSelected: false,
-                level: 2,
-                hasChildren: true,
-                visible: true,
-                children: [
-                  {
-                    id: 'angular',
-                    title: 'Angular/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                  {
-                    id: 'tailwind',
-                    title: 'Tailwind_SASS/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                  {
-                    id: 'html-css',
-                    title: 'HTML_CSS/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                ],
-              },
-              {
-                id: 'back',
-                title: 'Back/',
-                isExpanded: true,
-                isSelected: false,
-                level: 2,
-                hasChildren: true,
-                visible: true,
-                children: [
-                  {
-                    id: 'nodejs',
-                    title: 'NodeJS_Express/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                  {
-                    id: 'typescript',
-                    title: 'Typescript/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                  {
-                    id: 'php',
-                    title: 'PHP_Symfony/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                  {
-                    id: 'python',
-                    title: 'Python_Django/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                ],
-              },
-              {
-                id: 'data',
-                title: 'Data/',
-                isExpanded: true,
-                isSelected: false,
-                level: 2,
-                hasChildren: true,
-                visible: true,
-                children: [
-                  {
-                    id: 'postgresql',
-                    title: 'PostgreSQL/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                  {
-                    id: 'mongodb',
-                    title: 'MongoDB/',
-                    isExpanded: false,
-                    isSelected: false,
-                    level: 3,
-                    hasChildren: false,
-                    visible: true,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ];
+  // Computed to determine data source
+  private dataSource = computed(() => {
+    const external = this.externalData();
+    const fromService = this.dataService.skills();
+
+    console.log('External data:', external);
+    console.log('Service data:', fromService);
+    console.log(
+      'Service data type:',
+      Array.isArray(fromService) ? 'array' : typeof fromService,
+    );
+
+    // Use external data if provided, otherwise use service data
+    let data = external.length > 0 ? external : fromService;
+
+    // Ensure data is an array - if it's a single object, wrap it in an array
+    if (data && !Array.isArray(data)) {
+      console.log('Converting single object to array');
+      data = [data];
+    }
+
+    // Ensure data is actually an array
+    return Array.isArray(data) ? data : [];
+  });
+
+  constructor() {
+    // Effect to update tree state when data source changes
+    effect(() => {
+      const data = this.dataSource();
+      console.log('Neural profile data updated:', data);
+      this.treeState.set(data);
+    });
   }
 
   private flattenTreeWithVisibility(
@@ -269,7 +125,7 @@ export class NeuralProfileTreeComponent {
     });
   }
 
-  // NEW METHOD: Handle chip cell hover
+  // Handle chip cell hover
   hoverChipChild(childId: string): void {
     this.hoveredNodeId.set(childId);
   }
