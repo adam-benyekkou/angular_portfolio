@@ -22,15 +22,8 @@
         </header>
 
         <div class="experience-body">
-          <div class="detail-block">
-            <span class="detail-label">CLASSIFICATION:</span>
-            <span class="detail-value">{{ experience.classification }}</span>
-          </div>
-
-          <div class="detail-block">
-            <span class="detail-label">TIMELINE:</span>
-            <span class="detail-value">{{ experience.timeline }}</span>
-          </div>
+          <app-detail-block label="CLASSIFICATION:" [value]="experience.classification"/>
+          <app-detail-block label="TIMELINE:" [value]="experience.timeline"/>
 
           <div class="tech-section">
             <div class="detail-label">TECH_STACK:</div>

@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { type Experience } from '../../../../shared/models/experience.model';
+import { DetailBlockComponent } from '../shared/detail-block/detail-block.component';
 
 @Component({
   selector: 'app-column-education-info',
-  imports: [],
+  imports: [DetailBlockComponent],
   templateUrl: './column-education-info.component.html',
   styleUrl: './column-education-info.component.css',
 })

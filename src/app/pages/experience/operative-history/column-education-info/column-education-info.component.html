@@ -13,15 +13,8 @@
       </header>
 
       <div class="experience-body">
-        <div class="detail-block">
-          <span class="detail-label">PROGRAM:</span>
-          <span class="detail-value">{{ training.classification }}</span>
-        </div>
-
-        <div class="detail-block">
-          <span class="detail-label">INSTITUTION:</span>
-          <span class="detail-value">{{ training.timeline }}</span>
-        </div>
+        <app-detail-block label="PROGRAM:" [value]="training.classification"/>
+        <app-detail-block label="INSTITUTION:" [value]="training.timeline"/>
 
         <div class="tech-section">
           <div class="detail-label">CURRICULUM:</div>
